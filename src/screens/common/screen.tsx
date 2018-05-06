@@ -1,20 +1,20 @@
 import React from 'react'
 import { Component } from 'react';
 import { Container, Content, Header, Title, Button, Left, Right, Body, Icon } from 'native-base';
-import { NavigationScreenProp } from 'react-navigation';
+import { ScreenHeader, ScreenHeaderProps } from './screenheader';
 
-export type ScreenProps = {
-  navigation: NavigationScreenProp<any>;
+export type ScreenProps = ScreenHeaderProps & {
   render: (p: ScreenProps) => JSX.Element;
-  title: string;
 };
 
 export class Screen extends Component<ScreenProps> {
   render() {
-    const { navigation: { navigate }, render, title } = this.props;
+    const { render, ...otherProps } = this.props;
     return (
       <Container>
-        <ScreenHeader navigate={navigate} title={title} />
+        <ScreenHeader
+          {...otherProps}
+        />
         <Content>
           {render(this.props)}
         </Content>
@@ -22,17 +22,3 @@ export class Screen extends Component<ScreenProps> {
     );
   }
 };
-
-const ScreenHeader = ({ navigate, title }: HeaderProps) => (
-  <Header>
-    <Left>
-      <Button transparent onPress={() => navigate('DrawerOpen')}>
-        <Icon name='menu' />
-      </Button>
-    </Left>
-    <Body>
-      <Title>{title}</Title>
-    </Body>
-    <Right />
-  </Header>
-);

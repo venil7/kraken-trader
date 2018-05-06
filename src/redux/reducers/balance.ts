@@ -15,10 +15,10 @@ const initState: BalanceState = {
 const balance = (state = initState, action: BalanceAction) => {
   switch (action.type) {
     case LOAD: {
-      return { ...state, loading: LOADING };
+      return { ...state, loading: LOADING, balances: [] };
     }
     case LOADED: {
-      return { ...state, balances: action.payload, loading: SUCCESS };
+      return { ...state, loading: SUCCESS, balances: action.payload };
     }
     default:
       return state;

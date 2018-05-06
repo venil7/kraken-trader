@@ -44,7 +44,7 @@ export class Settings extends Component<SettingsProps, State> {
   render() {
     const { settings } = this.state;
     return (
-      <Screen title="Settings" {...this.props} render={(props) => (
+      <Screen back title="Settings" {...this.props} render={(props) => (
         <Form>
           <Item>
             <Icon active type="MaterialCommunityIcons" name="account-key" />

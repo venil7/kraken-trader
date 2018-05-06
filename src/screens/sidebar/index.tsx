@@ -1,15 +1,14 @@
 import React from "react";
 import { Component } from "react";
+import { Image } from "react-native";
 import {
-  Content,
-  Text,
-  List,
-  ListItem,
-  Icon,
-  Container,
-  Left,
+  Content, Text, List, ListItem,
+  Icon, Container, Left
 } from "native-base";
 import styles from "./style";
+
+const drawerCover = require("../../../assets/background.jpeg");
+const drawerImage = require("../../../assets/octopus.png");
 
 const items = [
   {
@@ -52,6 +51,10 @@ export class SideBar extends Component {
         <Content
           style={{ flex: 1, backgroundColor: "#fff", top: -1 }}
         >
+
+          <Image source={drawerCover} style={styles.drawerCover} />
+          <Image square style={styles.drawerImage} source={drawerImage} />
+
           <List
             dataArray={items}
             renderRow={data => (

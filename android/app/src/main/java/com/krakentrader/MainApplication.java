@@ -3,6 +3,7 @@ package com.krakentrader;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.gamega.RNAsyncStoragePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.facebook.react.ReactNativeHost;
@@ -25,6 +26,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNAsyncStoragePackage(),
             new VectorIconsPackage(),
             new RandomBytesPackage()
       );

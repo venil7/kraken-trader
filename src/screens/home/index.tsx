@@ -1,14 +1,14 @@
 import React from 'react'
 import { Component } from 'react';
 import * as Redux from 'redux';
-import { Text } from 'native-base';
+import { Text, Button, Content, Icon } from 'native-base';
 import { Screen, ScreenProps } from '../common/index';
 import { connect } from 'react-redux';
 import { GlobalState } from '../../redux/reducers';
-import { Balance } from '../../domain';
 import { BalanceAction, queryBalanceThunk } from '../../redux/actions/balance';
 import { Auth, auth } from '../../services/kraken';
 import { BalanceState } from '../../redux/reducers/balance';
+import { BalanceCard } from './balance-card';
 
 type Dispatch = Redux.Dispatch<BalanceAction, any>;
 
@@ -32,25 +32,38 @@ type HomeProps = ScreenProps & {
   auth: Auth
 };
 
-@connect(stateToProps, dispatchToProps)
-export class Home extends Component<HomeProps> {
+type HomeState = {
+  auth: Auth
+};
 
-  render() {
-    const balances = JSON.stringify(this.props.balance.balances, null, 2);
-    return (
-      <Screen
-        title="Home"
-        navigation={this.props.navigation}
-        render={(props) => (
-          <Text>
-            {balances}
-          </Text>
-        )} />
-    );
+@connect(stateToProps, dispatchToProps)
+export class Home extends Component<HomeProps, HomeState> {
+
+  refresh = () => {
+    const { loadBalances, auth } = this.props;
+    if (auth.cred) {
+      loadBalances(auth);
+    }
+  };
+
+  componentDidMount() {
+    this.refresh();
   }
 
-  componentDidUpdate() {
-    const { loadBalances, auth } = this.props;
-    loadBalances(auth);
+
+  render() {
+    const { balance, navigation } = this.props;
+    return (
+      <Screen
+        title="Kraken"
+        refresh={this.refresh}
+        navigation={navigation}
+        render={(props) => (
+          <Content>
+            <BalanceCard
+              balances={balance.balances} />
+          </Content>
+        )} />
+    );
   }
 }
