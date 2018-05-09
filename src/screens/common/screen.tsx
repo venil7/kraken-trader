@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react';
-import { Container, Content, Header, Title, Button, Left, Right, Body, Icon } from 'native-base';
+import { Container, Content } from 'native-base';
 import { ScreenHeader, ScreenHeaderProps } from './screenheader';
 
 export type ScreenProps = ScreenHeaderProps & {

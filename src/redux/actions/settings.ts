@@ -1,5 +1,6 @@
 import * as Redux from 'redux';
 import { Settings, getSettings, setSettings } from '../../services/settings';
+import { displaySuccess } from './notification';
 
 export const LOAD = "settings/load";
 export const LOADED = "settings/loaded";
@@ -34,4 +35,5 @@ export const saveSettingsThunk = (settings: Settings) => async (dispatch: Dispat
   dispatch({ type: SAVE });
   const payload = await setSettings(settings);
   dispatch({ type: SAVED, payload });
+  dispatch(displaySuccess('Saved!'));
 };

@@ -1,5 +1,5 @@
-import { BalanceAction, LOAD, LOADED } from '../actions/balance';
 import { Balance } from '../../domain';
+import { BalanceAction, LOAD, LOADED } from '../actions/balance';
 import { LoadingState, EMPTY, LOADING, SUCCESS } from './loading';
 
 export type BalanceState = {
