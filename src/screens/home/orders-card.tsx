@@ -2,13 +2,14 @@ import React from 'react'
 import { Component } from 'react';
 import { Card, CardItem, Icon, Right, Text } from 'native-base';
 import { Order } from '../../domain';
+import { hideIfNoData } from '../common/hide';
 
 export type OrdersCardProps = {
   orders: Order[]
   title: string;
 };
 
-export class OrdersCard extends Component<OrdersCardProps> {
+class OrdersCard_ extends Component<OrdersCardProps> {
   render() {
     const { orders, title } = this.props
     return (
@@ -29,3 +30,8 @@ export class OrdersCard extends Component<OrdersCardProps> {
     );
   }
 }
+
+const OrdersCard = hideIfNoData(
+  (props: OrdersCardProps) => !props.orders.length)(OrdersCard_);
+
+export { OrdersCard };

@@ -1,13 +1,15 @@
 import React from 'react'
 import { Component } from 'react';
 import { Card, CardItem, Icon, Right, Text } from 'native-base';
+import { branch, renderNothing } from 'recompose';
 import { Balance } from '../../domain';
+import { hideIfNoData } from '../common/hide';
 
 export type BalanceCardProps = {
   balances: Balance[]
 };
 
-export class BalanceCard extends Component<BalanceCardProps> {
+class BalanceCard_ extends Component<BalanceCardProps> {
   render() {
     const balances = this.props
       .balances
@@ -31,3 +33,8 @@ export class BalanceCard extends Component<BalanceCardProps> {
     );
   }
 }
+
+const BalanceCard = hideIfNoData(
+  (props: BalanceCardProps) => !props.balances.length)(BalanceCard_);
+
+export { BalanceCard };
