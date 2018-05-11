@@ -1,6 +1,6 @@
 import * as Redux from 'redux';
-import { Settings, getSettings, setSettings } from '../../services/settings';
-import { displaySuccess } from './notification';
+import { Settings, getSettings, setSettings, defaultSettings } from '../../services/settings';
+import { displaySuccess, displayDanger } from './notification';
 
 export const LOAD = "settings/load";
 export const LOADED = "settings/loaded";
@@ -27,13 +27,23 @@ type Dispatch = Redux.Dispatch<SettingsAction, any>;
 
 export const loadSettingsThunk = () => async (dispatch: Dispatch) => {
   dispatch({ type: LOAD });
-  const payload = await getSettings();
-  dispatch({ type: LOADED, payload });
+  try {
+    const payload = await getSettings();
+    dispatch({ type: LOADED, payload });
+  } catch ({ message }) {
+    dispatch(displayDanger(message));
+    dispatch({ type: LOADED, payload: defaultSettings });
+  }
 };
 
 export const saveSettingsThunk = (settings: Settings) => async (dispatch: Dispatch) => {
   dispatch({ type: SAVE });
-  const payload = await setSettings(settings);
-  dispatch({ type: SAVED, payload });
-  dispatch(displaySuccess('Saved!'));
+  try {
+    const payload = await setSettings(settings);
+    dispatch({ type: SAVED, payload });
+    dispatch(displaySuccess('Saved!'));
+  } catch ({ message }) {
+    dispatch(displayDanger(message));
+    dispatch({ type: LOADED, payload: defaultSettings });
+  }
 };

@@ -27,7 +27,7 @@ export type OrderAction =
 
 type Dispatch = Redux.Dispatch<OrderAction, any>;
 
-export const queryOpenOrdersThunk = (auth: Auth) => async (dispatch: Dispatch) => {
+export const loadOpenOrdersThunk = (auth: Auth) => async (dispatch: Dispatch) => {
   dispatch({ type: LOAD_OPEN });
   try {
     const orders = await getOpenOrders(auth);
@@ -38,7 +38,7 @@ export const queryOpenOrdersThunk = (auth: Auth) => async (dispatch: Dispatch) =
   }
 };
 
-export const queryClosedOrdersThunk = (auth: Auth) => async (dispatch: Dispatch) => {
+export const loadClosedOrdersThunk = (auth: Auth) => async (dispatch: Dispatch) => {
   dispatch({ type: LOAD_CLOSED });
   try {
     const orders = await getClosedOrders(auth);

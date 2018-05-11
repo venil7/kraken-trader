@@ -2,12 +2,12 @@ import React from 'react'
 import { Header, Title, Button, Left, Right, Body, Icon } from 'native-base';
 import { NavigationScreenProp } from 'react-navigation';
 
-
 export type ScreenHeaderProps = {
   navigation: NavigationScreenProp<any>;
-  refresh: () => void;
+  onRefresh: () => void;
   title: string;
   back?: boolean;
+  loading?: boolean;
 };
 
 const openDrawer = (navigation: NavigationScreenProp<any>) => () =>
@@ -15,11 +15,13 @@ const openDrawer = (navigation: NavigationScreenProp<any>) => () =>
 
 const ScreenHeader = ({
   navigation,
-  refresh,
+  onRefresh,
   title,
+  loading = false,
   back = false
 }: ScreenHeaderProps) => {
   const icon = back ? 'md-arrow-back' : 'menu';
+  const showRefresh = !loading && !!onRefresh;
   return (
     <Header>
       <Left>
@@ -31,9 +33,11 @@ const ScreenHeader = ({
         <Title>{title}</Title>
       </Body>
       <Right>
-        <Button transparent>
-          <Icon name="refresh" onPress={refresh} />
-        </Button>
+        {showRefresh ? (
+          <Button transparent>
+            <Icon name="refresh" onPress={onRefresh} />
+          </Button>
+        ) : null}
       </Right>
     </Header>
   );

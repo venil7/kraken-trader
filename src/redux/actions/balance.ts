@@ -19,7 +19,7 @@ export type BalanceAction =
 
 type Dispatch = Redux.Dispatch<BalanceAction, any>;
 
-export const queryBalanceThunk = (auth: Auth) => async (dispatch: Dispatch) => {
+export const loadBalancesThunk = (auth: Auth) => async (dispatch: Dispatch) => {
   dispatch({ type: LOAD });
   try {
     const balances = await getBalance(auth);

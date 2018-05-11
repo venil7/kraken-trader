@@ -8,3 +8,5 @@ export type LoadingState =
   | typeof SUCCESS
   | typeof ERROR
   | typeof LOADING;
+
+export const isLoading = (...states: LoadingState[]) => states.some(s => s === LOADING);

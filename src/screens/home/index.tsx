@@ -1,17 +1,18 @@
 import React from 'react'
 import { Component } from 'react';
 import * as Redux from 'redux';
-import { Content } from 'native-base';
+import { Content, Text } from 'native-base';
 import { Screen, ScreenProps } from '../common/index';
 import { connect } from 'react-redux';
 import { GlobalState } from '../../redux/reducers';
-import { BalanceAction, queryBalanceThunk } from '../../redux/actions/balance';
+import { BalanceAction, loadBalancesThunk } from '../../redux/actions/balance';
 import { Auth, auth } from '../../services/kraken';
 import { BalanceState } from '../../redux/reducers/balance';
 import { BalanceCard } from './balance-card';
-import { queryOpenOrdersThunk, queryClosedOrdersThunk } from '../../redux/actions/order';
+import { loadOpenOrdersThunk, loadClosedOrdersThunk } from '../../redux/actions/order';
 import { OrdersCard } from './orders-card';
 import { OrdersState } from '../../redux/reducers/orders';
+import { isLoading } from '../../redux/reducers/loading';
 
 type Dispatch = Redux.Dispatch<BalanceAction, any>;
 
@@ -25,9 +26,9 @@ const stateToProps = ({ balance, orders, settings }: GlobalState) => {
 
 const dispatchToProps = (dispatch: Dispatch) => {
   return {
-    loadBalances: (auth: Auth) => dispatch(queryBalanceThunk(auth)),
-    loadOpenOrders: (auth: Auth) => dispatch(queryOpenOrdersThunk(auth)),
-    loadClosedOrders: (auth: Auth) => dispatch(queryClosedOrdersThunk(auth)),
+    loadBalances: (auth: Auth) => dispatch(loadBalancesThunk(auth)),
+    loadOpenOrders: (auth: Auth) => dispatch(loadOpenOrdersThunk(auth)),
+    loadClosedOrders: (auth: Auth) => dispatch(loadClosedOrdersThunk(auth)),
   };
 };
 
@@ -58,13 +59,16 @@ export class Home extends Component<HomeProps, HomeState> {
 
   render() {
     const { balance, orders, navigation } = this.props;
+    const loading = isLoading(balance.loading, orders.loading);
     return (
       <Screen
         title="Kraken"
-        refresh={this.refresh}
+        onRefresh={this.refresh}
         navigation={navigation}
-        render={(props) => (
+        loading={loading}
+        render={() => (
           <Content>
+            {/* <Text>{loading.toString()}</Text> */}
             <BalanceCard
               balances={balance.balances} />
             <OrdersCard
