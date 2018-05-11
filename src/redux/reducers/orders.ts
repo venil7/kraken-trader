@@ -21,11 +21,17 @@ const orders = (state: OrdersState = initialState, action: OrderAction) => {
     case LOAD_OPEN:
       return { ...state, loading: LOADING, openOrders: [] };
     case LOADED_OPEN:
-      return { ...state, loading: SUCCESS, openOrders: action.payload, expires: expireInMinute() };
+      return {
+        ...state, loading: SUCCESS, openOrders: action.payload,
+        expires: expireInMinute()
+      };
     case LOAD_CLOSED:
       return { ...state, loading: LOADING, closedOrders: [] };
     case LOADED_CLOSED:
-      return { ...state, loading: SUCCESS, closedOrders: action.payload, expires: expireInMinute() };
+      return {
+        ...state, loading: SUCCESS, closedOrders: action.payload,
+        expires: expireInMinute()
+      };
 
     default:
       return state;

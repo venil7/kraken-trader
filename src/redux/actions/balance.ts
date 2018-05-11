@@ -19,13 +19,16 @@ export type BalanceAction =
 
 type Dispatch = Redux.Dispatch<BalanceAction, any>;
 
+export const loadedBalances = (payload: Balance[]): LoadedAction =>
+  ({ type: LOADED, payload });
+
 export const loadBalancesThunk = (auth: Auth) => async (dispatch: Dispatch) => {
   dispatch({ type: LOAD });
   try {
     const balances = await getBalance(auth);
-    dispatch({ type: LOADED, payload: balances });
+    dispatch(loadedBalances(balances));
   } catch ({ message }) {
     dispatch(displayDanger(message));
-    dispatch({ type: LOADED, payload: [] });
+    dispatch(loadedBalances([]));
   }
 };

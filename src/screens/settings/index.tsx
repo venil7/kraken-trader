@@ -4,9 +4,8 @@ import { Text, Form, Item, Input, Label, Icon, Button } from "native-base";
 import { Screen, ScreenProps } from '../common';
 import { GlobalState } from "../../redux/reducers";
 import { saveSettingsThunk } from "../../redux/actions/settings";
-import { SettingsState } from "../../redux/reducers/settings";
+import { Settings as SettingsState, defaultSettings } from "../../redux/reducers/settings";
 import { connect } from "react-redux";
-import { defaultSettings } from "../../services/settings";
 
 const stateToProps = (state: GlobalState) => ({ settings: state.settings });
 const dispatchToProps = (dispatch: Function) => {

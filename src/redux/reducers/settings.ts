@@ -1,9 +1,18 @@
-import { Settings, defaultSettings } from "../../services/settings";
 import { SettingsAction, LOADED, SAVED } from "../actions/settings";
 
-export type SettingsState = Settings;
+export type Settings = {
+  key: string;
+  secret: string;
+  balanceThreshold: number;
+};
 
-export const settings = (state: SettingsState = defaultSettings, action: SettingsAction) => {
+export const defaultSettings: Settings = {
+  key: '',
+  secret: '',
+  balanceThreshold: 0,
+};
+
+export const settings = (state: Settings = defaultSettings, action: SettingsAction) => {
   switch (action.type) {
     case LOADED:
     case SAVED: {

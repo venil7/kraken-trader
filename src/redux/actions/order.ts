@@ -27,14 +27,20 @@ export type OrderAction =
 
 type Dispatch = Redux.Dispatch<OrderAction, any>;
 
+export const loadedOpenOrders = (payload: Order[]): LoadedOpenAction =>
+  ({ type: LOADED_OPEN, payload });
+
+export const loadedClosedOrders = (payload: Order[]): LoadedClosedAction =>
+  ({ type: LOADED_CLOSED, payload });
+
 export const loadOpenOrdersThunk = (auth: Auth) => async (dispatch: Dispatch) => {
   dispatch({ type: LOAD_OPEN });
   try {
     const orders = await getOpenOrders(auth);
-    dispatch({ type: LOADED_OPEN, payload: orders });
+    dispatch(loadedOpenOrders(orders));
   } catch ({ message }) {
     dispatch(displayDanger(message));
-    dispatch({ type: LOADED_OPEN, payload: [] });
+    dispatch(loadedOpenOrders([]));
   }
 };
 
@@ -42,9 +48,9 @@ export const loadClosedOrdersThunk = (auth: Auth) => async (dispatch: Dispatch) 
   dispatch({ type: LOAD_CLOSED });
   try {
     const orders = await getClosedOrders(auth);
-    dispatch({ type: LOADED_CLOSED, payload: orders });
+    dispatch(loadedClosedOrders(orders));
   } catch ({ message }) {
     dispatch(displayDanger(message));
-    dispatch({ type: LOADED_CLOSED, payload: [] });
+    dispatch(loadedClosedOrders([]));
   }
 };

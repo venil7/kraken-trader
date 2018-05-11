@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import { orders, OrdersState } from './orders';
 import { balance, BalanceState } from './balance';
 import { settings } from './settings';
-import { Orders } from '../../screens';
 import { Settings } from '../../services/settings';
 
 export type GlobalState = {
@@ -11,10 +10,8 @@ export type GlobalState = {
   settings: Settings
 };
 
-const reducer = combineReducers<GlobalState>({
+export const reducer = combineReducers<GlobalState>({
   orders,
   balance,
   settings
 });
-
-export { reducer };

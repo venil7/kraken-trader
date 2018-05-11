@@ -6,9 +6,9 @@ export const setItem = <TVal>(key: string, val: TVal) =>
   AsyncStorage.setItem(wrapKey(key), JSON.stringify(val));
 
 
-export const getItem = async <TVal>(key: string, defaultVal: TVal): Promise<TVal> => {
+export const getItem = async <TVal>(key: string, getDefaultVal: () => TVal): Promise<TVal> => {
   const valStr = await AsyncStorage.getItem(wrapKey(key));
   return (valStr !== null)
     ? JSON.parse(valStr)
-    : defaultVal;
+    : getDefaultVal();
 };
