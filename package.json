@@ -19,6 +19,7 @@
     "events": "^1.1.1",
     "https-browserify": "0.0.1",
     "kraken-wrapper": "^1.0.1",
+    "moment": "^2.22.1",
     "native-base": "^2.4.3",
     "querystring-es3": "^0.2.1",
     "react": "16.3.1",
