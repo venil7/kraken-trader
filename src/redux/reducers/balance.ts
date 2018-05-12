@@ -1,10 +1,9 @@
 import { Balance } from '../../domain';
 import { BalanceAction, LOAD, LOADED } from '../actions/balance';
-import { LoadingState, EMPTY, LOADING, SUCCESS } from './loading';
+import { EMPTY, LOADING, SUCCESS, Loadable } from './loading';
 import { Expirable, EXPIRED, expireInMinute } from './expire';
 
-export type BalanceState = Expirable & {
-  loading: LoadingState;
+export type BalanceState = Expirable & Loadable & {
   balances: Balance[];
 };
 
@@ -20,7 +19,10 @@ const balance = (state = initState, action: BalanceAction) => {
       return { ...state, loading: LOADING, balances: [] };
     }
     case LOADED: {
-      return { ...state, loading: SUCCESS, balances: action.payload, expires: expireInMinute() };
+      return {
+        ...state, loading: SUCCESS,
+        balances: action.payload, expires: expireInMinute()
+      };
     }
     default:
       return state;

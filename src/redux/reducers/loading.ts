@@ -9,4 +9,9 @@ export type LoadingState =
   | typeof ERROR
   | typeof LOADING;
 
-export const isLoading = (...states: LoadingState[]) => states.some(s => s === LOADING);
+export type Loadable = {
+  loading: LoadingState
+};
+
+export const isLoading = (...states: LoadingState[]) =>
+  states.some(s => s === LOADING);

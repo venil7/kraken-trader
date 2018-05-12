@@ -1,8 +1,7 @@
 import { combineReducers } from 'redux';
 import { orders, OrdersState } from './orders';
 import { balance, BalanceState } from './balance';
-import { settings } from './settings';
-import { Settings } from '../../services/settings';
+import { settings, Settings } from './settings';
 
 export type GlobalState = {
   orders: OrdersState,

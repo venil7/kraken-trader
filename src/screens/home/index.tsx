@@ -68,7 +68,6 @@ export class Home extends Component<HomeProps, HomeState> {
         loading={loading}
         render={() => (
           <Content>
-            {/* <Text>{loading.toString()}</Text> */}
             <BalanceCard
               balances={balance.balances} />
             <OrdersCard

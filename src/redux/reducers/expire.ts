@@ -6,6 +6,9 @@ export type Expirable = {
 
 export const EXPIRED = 0;
 
+export const expired = ({ expires }: Expirable): boolean =>
+  moment.unix(expires).isSameOrBefore(moment());
+
 export const expireInSeconds = (s: number) =>
   moment().add(s, 's').unix();
 

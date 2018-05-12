@@ -1,6 +1,6 @@
 declare module 'kraken-wrapper' {
-  export type ApiBalance = {
-    error: string[];
+  export type ApiError = { error: string[] };
+  export type ApiBalance = ApiError & {
     result: {
       [symbol: string]: string
     }
@@ -34,8 +34,7 @@ declare module 'kraken-wrapper' {
     oflags: string
   };
 
-  export type ApiOrders = {
-    error: string[],
+  export type ApiOrders = ApiError & {
     result: {
       open: {
         [symbol: string]: ApiOrder
@@ -46,12 +45,78 @@ declare module 'kraken-wrapper' {
     }
   }
 
+  export type ApiAsset = {
+    aclass: string;
+    altname: string;
+    decimals: number;
+    display_decimals: number;
+  };
+  export type ApiAssets = ApiError & {
+    result: {
+      [symbol: string]: ApiAsset
+    }
+  };
+  export type ApiTradableAssetPair = {
+    altname: string;
+    aclass_base: string;
+    base: string;
+    aclass_quote: string;
+    quote: string;
+    lot: string;
+    pair_decimals: number;
+    lot_decimals: number;
+    lot_multiplier: number;
+    leverage_buy: any[];
+    leverage_sell: any[];
+    fees: [number, number][];
+    fees_maker: [number, number][];
+    fee_volume_currency: string;
+    margin_call: number;
+    margin_stop: number;
+  };
+  export type ApiTradableAssetPairs = ApiError & {
+    result: {
+      [symbol: string]: ApiTradableAssetPair
+    }
+  };
+
+  export type ApiTicker = {
+    a: [number, number, number];
+    b: [number, number, number];
+    c: [number, number];
+    v: [number, number];
+    p: [number, number];
+    t: [number, number];
+    l: [number, number];
+    h: [number, number];
+    o: [number, number];
+  };
+
+  export type ApiTickerInformation = ApiError & {
+    result: {
+      [symbol: string]: ApiTicker
+    }
+  };
+  export type ApiOHLCRow = [number, string, string, string, string, string, string, number];
+  export type ApiOHLCData = ApiError & {
+    result: {
+      [symbol: string]: ApiOHLCRow
+    }
+  };
+
   export default class KrakenWrapper {
     constructor(key: string, secret: string);
+    //public
+    public getAssetInfo(params?: any): Promise<ApiAssets>;
+    public getTradableAssetPairs(params?: any): Promise<ApiTradableAssetPairs>;
+    public getTickerInformation(params: { pair: string }): Promise<ApiTickerInformation>;
+    public getOHLC(params: { pair: string, interval: number }): Promise<ApiOHLCData>
+    //private
     public getBalance(): Promise<ApiBalance>;
     public getOpenOrders(params?: any): Promise<ApiOrders>;
     public getClosedOrders(params?: any): Promise<ApiOrders>;
     public getQueryOrders(params?: any): Promise<ApiOrders>;
+
     public getTradesHistory(params?: any): Promise<any>;
     public getQueryTrades(params?: any): Promise<any>;
     public getOpenPositions(params?: any): Promise<any>;
@@ -60,15 +125,14 @@ declare module 'kraken-wrapper' {
     public setAddOrder(params?: any): Promise<any>;
     public setCancelOrder(params?: any): Promise<any>;
   }
-  // export = KrakenWrapper;
 }
 
 declare module 'rn-async-storage' {
   class AsyncStorage {
-    static getItem: (s: string) => Promise<string>,
-    static setItem: (s: string, v: string) => Promise<void>,
-    static getAllKeys: () => Promise<string[]>,
-    static clear: () => Promise<void>
+    static getItem: (s: string) => Promise<string>;
+    static setItem: (s: string, v: string) => Promise<void>;
+    static getAllKeys: () => Promise<string[]>;
+    static clear: () => Promise<void>;
   }
   export = AsyncStorage;
 }
