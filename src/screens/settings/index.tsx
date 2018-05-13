@@ -41,34 +41,38 @@ export class Settings extends Component<SettingsProps, State> {
     return { settings: nextProps.settings };
   }
 
-  onChange = (key: string, value: any) => {
-    const newSettings = { [key]: value } as SettingsState;
+  onAuthChange = (auth: { key?: string, secret?: string }, save = false) => {
     const { settings } = this.state;
-    this.setState({ settings: { ...settings, ...newSettings } });
+    this.setState({ settings: { ...settings, ...auth } }, () => {
+      if (save) {
+        this.onSave();
+      }
+    });
   }
 
   onSave = () => this.props.saveSettings(this.state.settings);
 
   render() {
-    const { tab } = this.state;
+    const { tab, settings } = this.state;
+    const props = { ...this.props, settings };
     return (
       <Screen
         back
         title="Settings"
-        {...this.props}
-        render={(props) => {
+        {...props}
+        render={(_props) => {
           switch (tab) {
             case SettingsTab.Trading:
-              return (<SettingsTradingForm {...this.props} />)
+              return (<SettingsTradingForm {...props} />)
             case SettingsTab.View:
-              return (<SettingsViewForm {...this.props} />)
+              return (<SettingsViewForm {...props} />)
             case SettingsTab.API:
             default:
               return (
                 <SettingsApiForm
-                  {...this.props}
+                  {...props}
                   onSave={this.onSave}
-                  onChange={this.onChange}
+                  onAuthChange={this.onAuthChange}
                 />
               );
           }

@@ -7,12 +7,9 @@ type Obj = { entries: (o: any) => [string, any][] };
 const obj: Obj = Object;
 const { entries } = obj;
 
-export type Auth = {
-  key: string,
-  secret: string,
-  cred: boolean,
-};
 export type Authable = { key: string, secret: string };
+export type Auth = Authable & { cred: boolean };
+
 export const auth = ({ key, secret }: Authable) => (<Auth>{
   key,
   secret,

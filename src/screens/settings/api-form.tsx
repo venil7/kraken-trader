@@ -1,33 +1,36 @@
 import React from "react";
 import { ScreenProps } from "../common";
-import { Form, Button, Text, Item, Input, Label, Icon } from "native-base";
+import { Form, Button, Text, Item, Input, Label, Icon, Content } from "native-base";
 import { SettingsState } from "../../redux/reducers/settings";
+import { QrReader } from "./qr-reader";
 
 export type SettingsApiFormProps = ScreenProps & {
   settings: SettingsState;
   onSave: () => void;
-  onChange: (field: string, value: string) => void;
+  onAuthChange: (auth: { key?: string; secret?: string; }, save?: boolean) => void;
 };
 
 export const SettingsApiForm = (props: SettingsApiFormProps) => (
   <Form>
+    <Content padder />
     <Item>
       <Icon active type="MaterialCommunityIcons" name="account-key" />
       <Label>Kraken API</Label>
     </Item>
     <Item floatingLabel>
       <Label>Kraken API Key</Label>
-      <Input value={props.settings.key} onChangeText={v => props.onChange('key', v)} />
+      <Input value={props.settings.key}
+        onChangeText={key => props.onAuthChange({ key })} />
     </Item>
     <Item floatingLabel>
       <Label>Kraken API Secret</Label>
-      <Input value={props.settings.secret} onChangeText={v => props.onChange('secret', v)} />
+      <Input value={props.settings.secret}
+        onChangeText={secret => props.onAuthChange({ secret })} />
     </Item>
-    <Button dark>
-      <Icon name="qrcode" type="FontAwesome" />
-      <Text>Scan</Text>
-    </Button>
-    <Button success onPress={props.onSave}>
+    <Content padder />
+    <QrReader onRead={(auth) => props.onAuthChange(auth, true)} />
+    <Content padder />
+    <Button primary full onPress={props.onSave}>
       <Icon name="save" type="Feather" />
       <Text>Save</Text>
     </Button>

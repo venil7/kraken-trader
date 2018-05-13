@@ -1,6 +1,6 @@
 import { displaySuccess, displayDanger } from './notification';
 import { SettingsState, defaultSettings } from '../reducers/settings';
-import { Dispatch } from '.';
+import { Dispatch } from './index';
 
 export const LOADED = "settings/loaded";
 export const SAVE = "settings/save";

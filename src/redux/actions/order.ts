@@ -26,8 +26,6 @@ export type OrderAction =
   LoadClosedAction |
   LoadedClosedAction;
 
-// type Dispatch = Redux.Dispatch<OrderAction, any>;
-
 export const loadedOpenOrders = (payload: Order[]): LoadedOpenAction =>
   ({ type: LOADED_OPEN, payload });
 

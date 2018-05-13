@@ -12,5 +12,5 @@ export type GlobalState = {
 export const reducer = combineReducers<GlobalState>({
   orders,
   balance,
-  settings
+  settings,
 });
