@@ -1,6 +1,6 @@
-import * as Redux from 'redux';
 import { displaySuccess, displayDanger } from './notification';
-import { Settings, defaultSettings } from '../reducers/settings';
+import { SettingsState, defaultSettings } from '../reducers/settings';
+import { Dispatch } from '.';
 
 export const LOADED = "settings/loaded";
 export const SAVE = "settings/save";
@@ -10,22 +10,20 @@ type Loaded = typeof LOADED;
 type Save = typeof SAVE;
 type Saved = typeof SAVED;
 
-export type LoadedAction = { type: Loaded, payload: Settings };
+export type LoadedAction = { type: Loaded, payload: SettingsState };
 export type SaveAction = { type: Save };
-export type SavedAction = { type: Saved, payload: Settings };
+export type SavedAction = { type: Saved, payload: SettingsState };
 
 export type SettingsAction =
   LoadedAction |
   SaveAction |
   SavedAction;
 
-type Dispatch = Redux.Dispatch<SettingsAction, any>;
-
-export const loadedSettings = (payload: Settings): LoadedAction => {
+export const loadedSettings = (payload: SettingsState): LoadedAction => {
   return { type: LOADED, payload };
 }
 
-export const saveSettingsThunk = (settings: Settings) => (dispatch: Dispatch) => {
+export const saveSettingsThunk = (settings: SettingsState) => (dispatch: Dispatch) => {
   dispatch({ type: SAVE });
   try {
     dispatch(loadedSettings(settings));

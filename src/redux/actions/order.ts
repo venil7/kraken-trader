@@ -1,8 +1,9 @@
-import * as Redux from 'redux';
+// import * as Redux from 'redux';
 import { getOpenOrders, getClosedOrders } from '../../services/kraken';
 import { Order } from '../../domain';
 import { Auth } from '../../services/kraken';
 import { displayDanger } from './notification';
+import { Dispatch } from '.';
 
 export const LOAD_OPEN = "order/load/open";
 export const LOADED_OPEN = "order/loaded/open";
@@ -25,7 +26,7 @@ export type OrderAction =
   LoadClosedAction |
   LoadedClosedAction;
 
-type Dispatch = Redux.Dispatch<OrderAction, any>;
+// type Dispatch = Redux.Dispatch<OrderAction, any>;
 
 export const loadedOpenOrders = (payload: Order[]): LoadedOpenAction =>
   ({ type: LOADED_OPEN, payload });

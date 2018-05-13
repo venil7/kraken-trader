@@ -1,14 +1,19 @@
 import React from "react";
 import { Component } from "react";
-import { Text, Form, Item, Input, Label, Icon, Button } from "native-base";
+import { Text, Form, Item, Input, Label, Icon, Button, Footer, FooterTab } from "native-base";
 import { Screen, ScreenProps } from '../common';
 import { GlobalState } from "../../redux/reducers";
-import { saveSettingsThunk } from "../../redux/actions/settings";
-import { Settings as SettingsState, defaultSettings } from "../../redux/reducers/settings";
+import { saveSettingsThunk, SettingsAction } from "../../redux/actions/settings";
+import { SettingsState, defaultSettings } from "../../redux/reducers/settings";
 import { connect } from "react-redux";
+import { Dispatch } from "../../redux/actions";
+import { SettingsApiForm } from "./api-form";
+import { SettingsFooter, SettingsTab } from "./footer";
+import { SettingsTradingForm } from "./trading-form";
+import { SettingsViewForm } from "./view-form";
 
 const stateToProps = (state: GlobalState) => ({ settings: state.settings });
-const dispatchToProps = (dispatch: Function) => {
+const dispatchToProps = (dispatch: Dispatch) => {
   return {
     saveSettings: (settings: SettingsState) => dispatch(saveSettingsThunk(settings))
   };
@@ -20,19 +25,23 @@ type SettingsProps = ScreenProps & {
 };
 
 type State = {
+  tab?: SettingsTab
   settings: SettingsState,
-}
+};
 
 @connect(stateToProps, dispatchToProps)
 export class Settings extends Component<SettingsProps, State> {
 
-  state = { settings: defaultSettings };
+  state = {
+    settings: defaultSettings,
+    tab: SettingsTab.API,
+  };
 
   static getDerivedStateFromProps(nextProps: SettingsProps): State {
     return { settings: nextProps.settings };
   }
 
-  onFieldChange = (key: string) => (value: any) => {
+  onChange = (key: string, value: any) => {
     const newSettings = { [key]: value } as SettingsState;
     const { settings } = this.state;
     this.setState({ settings: { ...settings, ...newSettings } });
@@ -41,27 +50,34 @@ export class Settings extends Component<SettingsProps, State> {
   onSave = () => this.props.saveSettings(this.state.settings);
 
   render() {
-    const { settings } = this.state;
+    const { tab } = this.state;
     return (
-      <Screen back title="Settings" {...this.props} render={(props) => (
-        <Form>
-          <Item>
-            <Icon active type="MaterialCommunityIcons" name="account-key" />
-            <Label>Kraken API</Label>
-          </Item>
-          <Item floatingLabel>
-            <Label>Kraken API Key</Label>
-            <Input value={settings.key} onChangeText={this.onFieldChange('key')} />
-          </Item>
-          <Item floatingLabel>
-            <Label>Kraken API Secret</Label>
-            <Input value={settings.secret} onChangeText={this.onFieldChange('secret')} />
-          </Item>
-          <Button block success onPress={this.onSave}>
-            <Text>Save settings</Text>
-          </Button>
-        </Form>
-      )} />
+      <Screen
+        back
+        title="Settings"
+        {...this.props}
+        render={(props) => {
+          switch (tab) {
+            case SettingsTab.Trading:
+              return (<SettingsTradingForm {...this.props} />)
+            case SettingsTab.View:
+              return (<SettingsViewForm {...this.props} />)
+            case SettingsTab.API:
+            default:
+              return (
+                <SettingsApiForm
+                  {...this.props}
+                  onSave={this.onSave}
+                  onChange={this.onChange}
+                />
+              );
+          }
+        }}
+        footer={(props) => <SettingsFooter
+          {...props} active={tab}
+          onTab={(tab) => this.setState({ tab })}
+        />}
+      />
     );
   }
 }

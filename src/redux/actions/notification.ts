@@ -1,5 +1,6 @@
-import * as Redux from 'redux';
+// import * as Redux from 'redux';
 import { Toast } from 'native-base';
+import { Dispatch } from '.';
 
 const DANGER = 'danger';
 const WARNING = 'warning';
@@ -16,7 +17,7 @@ export type ShowNotification =
 
 export type NotificationAction = { type: ShowNotification, text: string };
 
-type Dispatch = Redux.Dispatch<NotificationAction, any>;
+// type Dispatch = Redux.Dispatch<NotificationAction, any>;
 
 const displayNotifcation = (type: ShowNotification, text: string) => (dispatch: Dispatch) => {
   dispatch({ text, type });

@@ -1,8 +1,9 @@
-import * as Redux from 'redux';
+// import * as Redux from 'redux';
 import { getBalance } from '../../services/kraken';
 import { Balance } from '../../domain';
 import { Auth } from '../../services/kraken';
 import { displayDanger } from './notification';
+import { Dispatch } from '.';
 
 export const LOAD = "balance/load";
 export const LOADED = "balance/loaded";
@@ -17,7 +18,7 @@ export type BalanceAction =
   LoadAction |
   LoadedAction;
 
-type Dispatch = Redux.Dispatch<BalanceAction, any>;
+// type Dispatch = Redux.Dispatch<BalanceAction, any>;
 
 export const loadedBalances = (payload: Balance[]): LoadedAction =>
   ({ type: LOADED, payload });

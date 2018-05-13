@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react';
-import * as Redux from 'redux';
+// import * as Redux from 'redux';
 import { Content, Text } from 'native-base';
 import { Screen, ScreenProps } from '../common/index';
 import { connect } from 'react-redux';
@@ -13,8 +13,9 @@ import { loadOpenOrdersThunk, loadClosedOrdersThunk } from '../../redux/actions/
 import { OrdersCard } from './orders-card';
 import { OrdersState } from '../../redux/reducers/orders';
 import { isLoading } from '../../redux/reducers/loading';
+import { Dispatch } from '../../redux/actions';
 
-type Dispatch = Redux.Dispatch<BalanceAction, any>;
+// type Dispatch = Redux.Dispatch<BalanceAction, any>;
 
 const stateToProps = ({ balance, orders, settings }: GlobalState) => {
   return {
