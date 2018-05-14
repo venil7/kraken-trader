@@ -85,31 +85,31 @@ export const toOhlcRow = (pair: string, row: ApiOHLCRow): OhlcRow => {
 
 export const symbolToName = (symbol: Symbol): string => {
   switch (symbol) {
-    case Symbol.XBT: return 'XBT - Bitcoin';
-    case Symbol.LTC: return 'LTC - Litecoin';
-    case Symbol.XDG: return 'XDG - Dogecoin';
-    case Symbol.REP: return 'REP - Augur';
-    case Symbol.XRP: return 'XRP - Ripple ';
-    case Symbol.XLM: return 'XLM - Stellar';
-    case Symbol.ETH: return 'ETH - Ether';
-    case Symbol.ETC: return 'ETC - Ether Classic';
-    case Symbol.ICN: return 'ICN - Iconomi';
-    case Symbol.USDT: return 'USDT - Tether';
-    case Symbol.DASH: return 'DASH - Dash';
-    case Symbol.ZEC: return 'ZEC - Zcash';
-    case Symbol.XMR: return 'XMR - Monero';
-    case Symbol.GNO: return 'GNO - Gnosis';
-    case Symbol.EOS: return 'EOS - Eos';
-    case Symbol.GBP: return 'BCH - Bitcoin Cash';
-    case Symbol.EUR: return 'EUR - Euro';
-    case Symbol.JPY: return 'USD - US Dollar';
-    case Symbol.USD: return 'JPY  - Japanese Yen';
-    case Symbol.CAD: return 'CAD - Canadian Dollar';
+    case Symbol.XBT: return 'Bitcoin';
+    case Symbol.LTC: return 'Litecoin';
+    case Symbol.XDG: return 'Dogecoin';
+    case Symbol.REP: return 'Augur';
+    case Symbol.XRP: return 'Ripple ';
+    case Symbol.XLM: return 'Stellar';
+    case Symbol.ETH: return 'Ether';
+    case Symbol.ETC: return 'Ether Classic';
+    case Symbol.ICN: return 'Iconomi';
+    case Symbol.USDT: return 'Tether';
+    case Symbol.DASH: return 'Dash';
+    case Symbol.ZEC: return 'Zcash';
+    case Symbol.XMR: return 'Monero';
+    case Symbol.GNO: return 'Gnosis';
+    case Symbol.EOS: return 'Eos';
+    case Symbol.GBP: return 'Bitcoin Cash';
+    case Symbol.EUR: return 'Euro';
+    case Symbol.JPY: return 'US Dollar';
+    case Symbol.USD: return 'Japanese Yen';
+    case Symbol.CAD: return 'Canadian Dollar';
     default: return symbol.toString();
   }
 };
 
-export const PairToSymbols = (pair: Pair): [Symbol, Symbol] => {
+export const pairToSymbols = (pair: Pair): [Symbol, Symbol] => {
   switch (pair) {
     case Pair.BCH_USD: return [Symbol.BCH, Symbol.USD];
     case Pair.BCH_XBT: return [Symbol.BCH, Symbol.XBT];

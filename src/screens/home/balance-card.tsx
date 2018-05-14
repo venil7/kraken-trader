@@ -27,7 +27,7 @@ class BalanceCard_ extends Component<BalanceCardProps> {
         {balances.map((balance: Balance, i: number) => (
           <CardItem key={balance.symbol} style={evenRow(i)}>
             <CryptoIcon symbol={balance.symbol} />
-            <Text style={style.rowText}>{symbolToName(balance.symbol)}</Text>
+            <Text style={style.marginLeft}>{symbolToName(balance.symbol)}</Text>
             <Right>
               <Text>{balance.balance}</Text>
             </Right>

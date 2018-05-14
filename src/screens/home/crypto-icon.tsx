@@ -1,9 +1,8 @@
 import React from 'react';
-import { Symbol } from '../../domain';
+import { Symbol, Pair } from '../../domain';
 import { Thumbnail } from 'native-base';
-export type CryptoIconProps = {
-  symbol: Symbol
-};
+import { pairToSymbols } from '../../services/convert';
+import style from './style';
 
 const xbt = require('../../../assets/crypto/btc.png');
 const ltc = require('../../../assets/crypto/ltc.png');
@@ -53,7 +52,23 @@ const symbolToUri = (symbol: Symbol): any => {
   }
 };
 
+export type CryptoIconProps = {
+  symbol: Symbol
+};
 export const CryptoIcon = ({ symbol }: CryptoIconProps) => (
   <Thumbnail small source={symbolToUri(symbol)} />
 );
 
+
+export type CryptoPairIconProps = {
+  pair: Pair;
+};
+export const CryptoPairIcon = ({ pair }: CryptoPairIconProps) => {
+  const [symbol1, symbol2] = pairToSymbols(pair);
+  return (
+    <React.Fragment>
+      <Thumbnail style={style.marginLeft} small source={symbolToUri(symbol1)} />
+      <Thumbnail style={style.negMargin} small source={symbolToUri(symbol2)} />
+    </React.Fragment>
+  );
+};

@@ -5,6 +5,7 @@ import { Order } from '../../domain';
 import { hideIfNoData } from '../common/hide';
 import style, { evenRow } from './style';
 import { BuySellIcon } from './buy-sell-icon';
+import { CryptoPairIcon } from './crypto-icon';
 
 export type OrdersCardProps = {
   orders: Order[]
@@ -23,7 +24,8 @@ class OrdersCard_ extends Component<OrdersCardProps> {
         {orders.map((order: Order, i: number) => (
           <CardItem key={order.id} style={evenRow(i)}>
             <BuySellIcon order={order} />
-            <Text style={style.rowText}>{order.descr.pair}</Text>
+            <CryptoPairIcon pair={order.descr.pair} />
+            <Text style={style.marginLeft}>{order.status}</Text>
             <Right>
               <Text>{order.vol}</Text>
             </Right>

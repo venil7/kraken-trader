@@ -1,10 +1,12 @@
 const style = {
-  rowText: {
-    alignSelf: "center",
-    marginLeft: 4,
+  marginLeft: {
+    marginLeft: 7,
   },
   evenRow: {
     backgroundColor: '#eee'
+  },
+  negMargin: {
+    marginLeft: -18,
   }
 };
 
