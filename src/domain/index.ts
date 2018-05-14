@@ -1,5 +1,4 @@
-export type Currency = string;
-export type Balance = { symbol: Currency, balance: number };
+export type Balance = { symbol: Symbol, balance: number };
 
 export enum Status {
   Open = "open",

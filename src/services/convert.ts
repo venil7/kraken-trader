@@ -1,6 +1,7 @@
 /// <reference path="kraken-wrapper.d.ts" />
 import { ApiOrder, ApiAsset, ApiTradableAssetPair, ApiTicker, ApiOHLCRow } from 'kraken-wrapper';
 import { Order, Status, OrderType, Asset, TradableAssetPair, Ticker, Pair, CurrencyType, OhlcRow } from "../domain";
+import { Symbol } from '../domain';
 
 export const toOrder = (id: string, body: ApiOrder): Order => {
   const { descr } = body;
@@ -81,3 +82,29 @@ export const toOhlcRow = (pair: string, row: ApiOHLCRow): OhlcRow => {
     count,
   };
 };
+
+export const symbolToName = (symbol: Symbol): string => {
+  switch (symbol) {
+    case Symbol.XBT: return 'XBT - Bitcoin';
+    case Symbol.LTC: return 'LTC - Litecoin';
+    case Symbol.XDG: return 'XDG - Dogecoin';
+    case Symbol.REP: return 'REP - Augur';
+    case Symbol.XRP: return 'XRP - Ripple ';
+    case Symbol.XLM: return 'XLM - Stellar';
+    case Symbol.ETH: return 'ETH - Ether';
+    case Symbol.ETC: return 'ETC - Ether Classic';
+    case Symbol.ICN: return 'ICN - Iconomi';
+    case Symbol.USDT: return 'USDT - Tether';
+    case Symbol.DASH: return 'DASH - Dash';
+    case Symbol.ZEC: return 'ZEC - Zcash';
+    case Symbol.XMR: return 'XMR - Monero';
+    case Symbol.GNO: return 'GNO - Gnosis';
+    case Symbol.EOS: return 'EOS - Eos';
+    case Symbol.GBP: return 'BCH - Bitcoin Cash';
+    case Symbol.EUR: return 'EUR - Euro';
+    case Symbol.JPY: return 'USD - US Dollar';
+    case Symbol.USD: return 'JPY  - Japanese Yen';
+    case Symbol.CAD: return 'CAD - Canadian Dollar';
+    default: return symbol.toString();
+  }
+}

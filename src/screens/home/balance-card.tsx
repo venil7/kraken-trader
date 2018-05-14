@@ -4,10 +4,14 @@ import { Card, CardItem, Icon, Right, Text } from 'native-base';
 import { branch, renderNothing } from 'recompose';
 import { Balance } from '../../domain';
 import { hideIfNoData } from '../common/hide';
+import { CryptoIcon } from './crypto-icon';
+import { symbolToName } from '../../services/convert';
+import style, { evenRow } from './style';
 
 export type BalanceCardProps = {
   balances: Balance[]
 };
+
 
 class BalanceCard_ extends Component<BalanceCardProps> {
   render() {
@@ -20,12 +24,12 @@ class BalanceCard_ extends Component<BalanceCardProps> {
         <CardItem header>
           <Text>Balances:</Text>
         </CardItem>
-        {balances.map(b => (
-          <CardItem key={b.symbol}>
-            <Icon type="MaterialCommunityIcons" name="coin" />
-            <Text>{b.symbol}</Text>
+        {balances.map((balance: Balance, i: number) => (
+          <CardItem key={balance.symbol} style={evenRow(i)}>
+            <CryptoIcon symbol={balance.symbol} />
+            <Text style={style.rowText}>{symbolToName(balance.symbol)}</Text>
             <Right>
-              <Text>{b.balance}</Text>
+              <Text>{balance.balance}</Text>
             </Right>
           </CardItem>
         ))}

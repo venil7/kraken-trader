@@ -3,11 +3,14 @@ import { Component } from 'react';
 import { Card, CardItem, Icon, Right, Text } from 'native-base';
 import { Order } from '../../domain';
 import { hideIfNoData } from '../common/hide';
+import style, { evenRow } from './style';
+import { BuySellIcon } from './buy-sell-icon';
 
 export type OrdersCardProps = {
   orders: Order[]
   title: string;
 };
+
 
 class OrdersCard_ extends Component<OrdersCardProps> {
   render() {
@@ -17,12 +20,12 @@ class OrdersCard_ extends Component<OrdersCardProps> {
         <CardItem header>
           <Text>{title}: ({orders.length})</Text>
         </CardItem>
-        {orders.map((order: Order) => (
-          <CardItem key={order.id}>
-            <Icon type="Feather" name="shopping-cart" />
-            <Text>{order.descr.pair}</Text>
+        {orders.map((order: Order, i: number) => (
+          <CardItem key={order.id} style={evenRow(i)}>
+            <BuySellIcon order={order} />
+            <Text style={style.rowText}>{order.descr.pair}</Text>
             <Right>
-              <Text>{order.descr.order}</Text>
+              <Text>{order.vol}</Text>
             </Right>
           </CardItem>
         ))}
