@@ -1,8 +1,11 @@
 import React from 'react';
-import { Symbol, Pair } from '../../domain';
+import { Symbol, Pair, OrderType } from '../../domain';
 import { Thumbnail } from 'native-base';
 import { pairToSymbols } from '../../services/convert';
 import style from './style';
+import { BuySellIcon } from './buy-sell-icon';
+import { StyleProp } from 'react-native';
+import { ImageStyle } from 'react-native';
 
 const xbt = require('../../../assets/crypto/btc.png');
 const ltc = require('../../../assets/crypto/ltc.png');
@@ -52,23 +55,32 @@ const symbolToUri = (symbol: Symbol): any => {
   }
 };
 
+type Style = StyleProp<ImageStyle>;
+
 export type CryptoIconProps = {
-  symbol: Symbol
+  symbol: Symbol,
+  style?: Style
 };
-export const CryptoIcon = ({ symbol }: CryptoIconProps) => (
-  <Thumbnail small source={symbolToUri(symbol)} />
-);
+export const CryptoIcon = (props: CryptoIconProps) => {
+  const s = { ...style.scaleDown, ...props.style };
+  return (
+    <Thumbnail small source={symbolToUri(props.symbol)} style={s} />
+  )
+};
 
 
 export type CryptoPairIconProps = {
   pair: Pair;
+  orderType?: OrderType;
 };
-export const CryptoPairIcon = ({ pair }: CryptoPairIconProps) => {
+export const CryptoPairIcon = ({ pair, orderType }: CryptoPairIconProps) => {
   const [symbol1, symbol2] = pairToSymbols(pair);
+  const buySellStyle = { ...style.negMargin, ...style.scaleDown };
   return (
     <React.Fragment>
-      <Thumbnail style={style.marginLeft} small source={symbolToUri(symbol1)} />
-      <Thumbnail style={style.negMargin} small source={symbolToUri(symbol2)} />
+      <CryptoIcon symbol={symbol1} />
+      <CryptoIcon symbol={symbol2} style={style.negMargin} />
+      {/* {orderType ? <BuySellIcon orderType={orderType} style={buySellStyle} /> : null} */}
     </React.Fragment>
   );
 };

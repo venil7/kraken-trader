@@ -3,7 +3,7 @@ export type Balance = { symbol: Symbol, balance: number };
 export enum Status {
   Open = "open",
   Closed = "closed",
-  Cancelled = "cancelled",
+  Canceled = "canceled",
 };
 
 export enum OrderType {
@@ -125,21 +125,21 @@ export type Order = {
   opentm: number,
   starttm: number,
   expiretm: number,
-  descr: {
-    pair: Pair,
-    type: OrderType,
-    ordertype: string,
-    price: number,
-    price2: number,
-    leverage: string,
-    order: string,
-    close: string
-  },
+  pair: Pair,
+  type: OrderType,
+  ordertype: string,
+  price: number,
+  price2: number,
+  leverage: string,
+  order: string,
+  close: string
+  base: Symbol,
+  quote: Symbol,
   vol: number,
   vol_exec: number,
   cost: number,
   fee: number,
-  price: number,
+  actualPrice: number,
   stopprice: number,
   limitprice: number,
   misc: string,

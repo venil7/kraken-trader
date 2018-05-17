@@ -1,11 +1,12 @@
 import React from 'react'
 import { Component } from 'react';
-import { Card, CardItem, Icon, Right, Text } from 'native-base';
+import { Card, CardItem, Right, Text } from 'native-base';
 import { Order } from '../../domain';
 import { hideIfNoData } from '../common/hide';
 import style, { evenRow } from './style';
-import { BuySellIcon } from './buy-sell-icon';
+import { StatusBadge } from './buy-sell-icon';
 import { CryptoPairIcon } from './crypto-icon';
+import { orderToText } from '../../services/convert';
 
 export type OrdersCardProps = {
   orders: Order[]
@@ -15,7 +16,7 @@ export type OrdersCardProps = {
 
 class OrdersCard_ extends Component<OrdersCardProps> {
   render() {
-    const { orders, title } = this.props
+    const { orders, title } = this.props;
     return (
       <Card>
         <CardItem header>
@@ -23,11 +24,10 @@ class OrdersCard_ extends Component<OrdersCardProps> {
         </CardItem>
         {orders.map((order: Order, i: number) => (
           <CardItem key={order.id} style={evenRow(i)}>
-            <BuySellIcon order={order} />
-            <CryptoPairIcon pair={order.descr.pair} />
-            <Text style={style.marginLeft}>{order.status}</Text>
+            <CryptoPairIcon pair={order.pair} orderType={order.type} />
+            <StatusBadge status={order.status} style={style.marginLeft} />
             <Right>
-              <Text>{order.vol}</Text>
+              <Text>{orderToText(order)}</Text>
             </Right>
           </CardItem>
         ))}

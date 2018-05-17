@@ -5,7 +5,7 @@ import { branch, renderNothing } from 'recompose';
 import { Balance } from '../../domain';
 import { hideIfNoData } from '../common/hide';
 import { CryptoIcon } from './crypto-icon';
-import { symbolToName } from '../../services/convert';
+import { symbolToName, toAmount } from '../../services/convert';
 import style, { evenRow } from './style';
 
 export type BalanceCardProps = {
@@ -29,7 +29,7 @@ class BalanceCard_ extends Component<BalanceCardProps> {
             <CryptoIcon symbol={balance.symbol} />
             <Text style={style.marginLeft}>{symbolToName(balance.symbol)}</Text>
             <Right>
-              <Text>{balance.balance}</Text>
+              <Text>{toAmount(balance.balance, balance.symbol)}</Text>
             </Right>
           </CardItem>
         ))}

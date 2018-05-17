@@ -5,34 +5,35 @@ import { Symbol } from '../domain';
 
 export const toOrder = (id: string, body: ApiOrder): Order => {
   const { descr } = body;
+  const [base, quote] = pairToSymbols(descr.pair as Pair);
   return {
     id,
     refid: body.refid,
     userref: body.userref,
-    status: body.status as Status,
+    status: <Status>body.status,
     opentm: body.opentm,
     starttm: body.starttm,
     expiretm: body.expiretm,
-    descr: {
-      pair: descr.pair as Pair,
-      type: descr.type as OrderType,
-      ordertype: descr.ordertype,
-      price: parseFloat(descr.price),
-      price2: parseFloat(descr.price2),
-      leverage: descr.leverage,
-      order: descr.order,
-      close: descr.close
-    },
+    pair: <Pair>descr.pair,
+    type: <OrderType>descr.type,
+    ordertype: descr.ordertype,
+    price: parseFloat(descr.price),
+    price2: parseFloat(descr.price2),
+    leverage: descr.leverage,
+    order: descr.order,
+    close: descr.close,
+    base: base,
+    quote: quote,
     vol: parseFloat(body.vol),
     vol_exec: parseFloat(body.vol_exec),
     cost: parseFloat(body.cost),
     fee: parseFloat(body.fee),
-    price: parseFloat(body.price),
+    actualPrice: parseFloat(body.price),
     stopprice: parseFloat(body.stopprice),
     limitprice: parseFloat(body.limitprice),
     misc: body.misc,
     oflags: body.oflags
-  }
+  };
 };
 
 export const toAsset = (symbol: string, asset: ApiAsset): Asset => {
@@ -108,6 +109,44 @@ export const symbolToName = (symbol: Symbol): string => {
     default: return symbol.toString();
   }
 };
+
+export const symbolToLetter = (symbol: Symbol): string => {
+  switch (symbol) {
+    case Symbol.XBT: return '฿';
+    case Symbol.LTC: return 'Ł';
+    case Symbol.XDG: return 'Ð';
+    case Symbol.XRP: return '₹ ';
+    case Symbol.ETH: return 'Ξ';
+    case Symbol.ETC: return 'ΞC';
+    case Symbol.USDT: return '$T';
+    case Symbol.XMR: return 'ɱ';
+    case Symbol.GBP: return 'ɃC';
+    case Symbol.EUR: return '€';
+    case Symbol.JPY: return '$';
+    case Symbol.USD: return '¥';
+    case Symbol.CAD: return '$C';
+    default: return symbolToName(symbol)[0];
+  }
+};
+
+export const format = (n: number, decimals = 5) => {
+  let res = n.toFixed(decimals);
+  const last = (s: string) => s[s.length - 1];
+  for (let i = 0; i < (decimals - 2); i++) {
+    if (last(res) === '0') {
+      res = res.substring(0, res.length - 1);
+    } else {
+      return res;
+    }
+  }
+  return res;
+};
+
+export const toAmount = (amount: number, symbol: Symbol): string =>
+  `${symbolToLetter(symbol)} ${format(amount)}`;
+
+export const orderToText = (order: Order): string =>
+  `${toAmount(order.vol, order.base)} @ ${toAmount(order.price, order.quote)}`;
 
 export const pairToSymbols = (pair: Pair): [Symbol, Symbol] => {
   switch (pair) {
