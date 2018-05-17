@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react';
-import { Card, CardItem, Icon, Right, Text } from 'native-base';
+import { Card, CardItem, Icon, Right, Text, List, ListItem, Body, Left } from 'native-base';
 import { branch, renderNothing } from 'recompose';
 import { Balance } from '../../domain';
 import { hideIfNoData } from '../common/hide';
@@ -24,15 +24,22 @@ class BalanceCard_ extends Component<BalanceCardProps> {
         <CardItem header>
           <Text>Balances:</Text>
         </CardItem>
-        {balances.map((balance: Balance, i: number) => (
-          <CardItem key={balance.symbol} style={evenRow(i)}>
-            <CryptoIcon symbol={balance.symbol} />
-            <Text style={style.marginLeft}>{symbolToName(balance.symbol)}</Text>
-            <Right>
-              <Text>{toAmount(balance.balance, balance.symbol)}</Text>
-            </Right>
-          </CardItem>
-        ))}
+        <List>
+          {balances.map((balance: Balance) => (
+            <ListItem icon key={balance.symbol} >
+              <Left>
+                <CryptoIcon symbol={balance.symbol} />
+              </Left>
+              <Body>
+                <Text>{symbolToName(balance.symbol)}</Text>
+                <Text note>some text</Text>
+              </Body>
+              <Right>
+                <Text>{toAmount(balance.balance, balance.symbol)}</Text>
+              </Right>
+            </ListItem>
+          ))}
+        </List>
       </Card>
     );
   }

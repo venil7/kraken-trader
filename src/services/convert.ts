@@ -143,7 +143,7 @@ export const format = (n: number, decimals = 5) => {
 };
 
 export const toAmount = (amount: number, symbol: Symbol): string =>
-  `${symbolToLetter(symbol)} ${format(amount)}`;
+  `${symbolToLetter(symbol)}${format(amount)}`;
 
 export const orderToText = (order: Order): string =>
   `${toAmount(order.vol, order.base)} @ ${toAmount(order.price, order.quote)}`;

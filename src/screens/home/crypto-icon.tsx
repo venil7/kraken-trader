@@ -80,7 +80,6 @@ export const CryptoPairIcon = ({ pair, orderType }: CryptoPairIconProps) => {
     <React.Fragment>
       <CryptoIcon symbol={symbol1} />
       <CryptoIcon symbol={symbol2} style={style.negMargin} />
-      {/* {orderType ? <BuySellIcon orderType={orderType} style={buySellStyle} /> : null} */}
     </React.Fragment>
   );
 };
