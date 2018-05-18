@@ -9,8 +9,10 @@ const style = {
     marginLeft: -18,
   },
   scaleDown: {
-    scaleX: 0.7,
-    scaleY: 0.7
+    transform: [
+      { scaleX: 0.7 },
+      { scaleY: 0.7 }
+    ]
   }
 };
 

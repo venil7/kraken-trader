@@ -2,7 +2,7 @@ import { getItem, setItem } from './storage';
 import { GlobalState, reducer } from '../redux/reducers';
 const STORE = 'store';
 
-export const getStore = async (): Promise<GlobalState> => {
+export const getSerializedStore = async (): Promise<GlobalState> => {
   const store = await getItem<GlobalState>(STORE, () => reducer(undefined, { type: '@@NONE' }));
   return store;
 };

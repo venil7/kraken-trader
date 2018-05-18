@@ -1,8 +1,8 @@
 import { LoadingState, EMPTY, LOADING, SUCCESS, Loadable } from './loading';
 import { EXPIRED, Expirable, expireInMinute, expireInDays } from './expire';
 import { Asset, TradableAssetPair, CurrencyType } from '../../domain';
-import { StaticAction, LOAD_STATIC, LOADED_STATIC } from '../actions/static';
-import { LOADED } from '../actions/balance';
+import { StaticAction, LOAD_STATIC, LOADED_STATIC, LOADED_STATIC_FIAT, LOADED_STATIC_CRYPTO } from '../actions/static';
+import { pairToSymbols } from '../../services/convert';
 
 export type StaticState = Expirable & Loadable & {
   cryptos: Asset[],
@@ -18,7 +18,7 @@ const initialState: StaticState = {
   tradables: [],
 };
 
-export const staticData = (state: StaticState = initialState, action: StaticAction) => {
+export const statics = (state: StaticState = initialState, action: StaticAction) => {
   switch (action.type) {
     case LOAD_STATIC: {
       return {
@@ -31,10 +31,17 @@ export const staticData = (state: StaticState = initialState, action: StaticActi
       const fiats = assets.filter(a => a.type === CurrencyType.Fiat);
       const cryptos = assets.filter(a => a.type === CurrencyType.Crypto);
       return {
-        ...state, loading: LOADED,
+        ...state,
+        loading: SUCCESS,
         fiats, cryptos, tradables,
-        expire: expireInDays(30)
+        expires: expireInDays(30)
       }
+    }
+    case LOADED_STATIC_FIAT: {
+      return { ...state, fiats: action.payload };
+    }
+    case LOADED_STATIC_CRYPTO: {
+      return { ...state, cryptos: action.payload };
     }
     default:
       return state;

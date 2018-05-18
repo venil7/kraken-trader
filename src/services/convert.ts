@@ -101,10 +101,11 @@ export const symbolToName = (symbol: Symbol): string => {
     case Symbol.XMR: return 'Monero';
     case Symbol.GNO: return 'Gnosis';
     case Symbol.EOS: return 'Eos';
-    case Symbol.GBP: return 'Bitcoin Cash';
+    case Symbol.GBP: return 'British Pound';
     case Symbol.EUR: return 'Euro';
-    case Symbol.JPY: return 'US Dollar';
-    case Symbol.USD: return 'Japanese Yen';
+    case Symbol.JPY: return 'Japanese Yen';
+    case Symbol.KRW: return 'Korean Won';
+    case Symbol.USD: return 'US Dollar';
     case Symbol.CAD: return 'Canadian Dollar';
     default: return symbol.toString();
   }

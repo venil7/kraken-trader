@@ -1,9 +1,9 @@
 // import * as Redux from 'redux';
-import { getOpenOrders, getClosedOrders } from '../../services/kraken';
+import { getOpenOrders, getClosedOrders, auth } from '../../services/kraken';
 import { Order } from '../../domain';
 import { Auth } from '../../services/kraken';
 import { displayDanger } from './notification';
-import { Dispatch } from '.';
+import { Dispatch, GetState } from '.';
 
 export const LOAD_OPEN = "order/load/open";
 export const LOADED_OPEN = "order/loaded/open";
@@ -32,24 +32,35 @@ export const loadedOpenOrders = (payload: Order[]): LoadedOpenAction =>
 export const loadedClosedOrders = (payload: Order[]): LoadedClosedAction =>
   ({ type: LOADED_CLOSED, payload });
 
-export const loadOpenOrdersThunk = (auth: Auth) => async (dispatch: Dispatch) => {
-  dispatch({ type: LOAD_OPEN });
-  try {
-    const orders = await getOpenOrders(auth);
-    dispatch(loadedOpenOrders(orders));
-  } catch ({ message }) {
-    dispatch(displayDanger(message));
-    dispatch(loadedOpenOrders([]));
-  }
-};
+export const loadOpenOrdersThunk = () =>
+  async (dispatch: Dispatch, getState: GetState) => {
+    const _auth = auth(getState().settings);
 
-export const loadClosedOrdersThunk = (auth: Auth) => async (dispatch: Dispatch) => {
-  dispatch({ type: LOAD_CLOSED });
-  try {
-    const orders = await getClosedOrders(auth);
-    dispatch(loadedClosedOrders(orders));
-  } catch ({ message }) {
-    dispatch(displayDanger(message));
-    dispatch(loadedClosedOrders([]));
-  }
+    dispatch({ type: LOAD_OPEN });
+    try {
+      const orders = await getOpenOrders(_auth);
+      dispatch(loadedOpenOrders(orders));
+    } catch ({ message }) {
+      dispatch(displayDanger(message));
+      dispatch(loadedOpenOrders([]));
+    }
+  };
+
+export const loadClosedOrdersThunk = () =>
+  async (dispatch: Dispatch, getState: GetState) => {
+    const _auth = auth(getState().settings);
+
+    dispatch({ type: LOAD_CLOSED });
+    try {
+      const orders = await getClosedOrders(_auth);
+      dispatch(loadedClosedOrders(orders));
+    } catch ({ message }) {
+      dispatch(displayDanger(message));
+      dispatch(loadedClosedOrders([]));
+    }
+  };
+
+export const loadOpenClosedOrdersThunk = () => async (dispatch: Dispatch) => {
+  await loadOpenOrdersThunk();
+  await loadClosedOrdersThunk();
 };

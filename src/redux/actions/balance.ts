@@ -1,9 +1,7 @@
-// import * as Redux from 'redux';
-import { getBalance } from '../../services/kraken';
+import { getBalance, auth } from '../../services/kraken';
 import { Balance } from '../../domain';
-import { Auth } from '../../services/kraken';
 import { displayDanger } from './notification';
-import { Dispatch } from '.';
+import { Dispatch, GetState } from '.';
 
 export const LOAD = "balance/load";
 export const LOADED = "balance/loaded";
@@ -18,18 +16,18 @@ export type BalanceAction =
   LoadAction |
   LoadedAction;
 
-// type Dispatch = Redux.Dispatch<BalanceAction, any>;
-
 export const loadedBalances = (payload: Balance[]): LoadedAction =>
   ({ type: LOADED, payload });
 
-export const loadBalancesThunk = (auth: Auth) => async (dispatch: Dispatch) => {
-  dispatch({ type: LOAD });
-  try {
-    const balances = await getBalance(auth);
-    dispatch(loadedBalances(balances));
-  } catch ({ message }) {
-    dispatch(displayDanger(message));
-    dispatch(loadedBalances([]));
-  }
-};
+export const loadBalancesThunk = () =>
+  async (dispatch: Dispatch, getState: GetState) => {
+    dispatch({ type: LOAD });
+    const _auth = auth(getState().settings);
+    try {
+      const balances = await getBalance(_auth);
+      dispatch(loadedBalances(balances));
+    } catch ({ message }) {
+      dispatch(displayDanger(message));
+      dispatch(loadedBalances([]));
+    }
+  };

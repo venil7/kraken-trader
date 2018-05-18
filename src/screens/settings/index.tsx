@@ -1,6 +1,5 @@
 import React from "react";
 import { Component } from "react";
-import { Text, Form, Item, Input, Label, Icon, Button, Footer, FooterTab } from "native-base";
 import { Screen, ScreenProps } from '../common';
 import { GlobalState } from "../../redux/reducers";
 import { saveSettingsThunk, SettingsAction } from "../../redux/actions/settings";
@@ -11,8 +10,9 @@ import { SettingsApiForm } from "./api-form";
 import { SettingsFooter, SettingsTab } from "./footer";
 import { SettingsTradingForm } from "./trading-form";
 import { SettingsViewForm } from "./view-form";
+import { StaticState } from "../../redux/reducers/static";
 
-const stateToProps = (state: GlobalState) => ({ settings: state.settings });
+const stateToProps = ({ settings, statics }: GlobalState) => ({ settings, statics });
 const dispatchToProps = (dispatch: Dispatch) => {
   return {
     saveSettings: (settings: SettingsState) => dispatch(saveSettingsThunk(settings))
@@ -20,8 +20,9 @@ const dispatchToProps = (dispatch: Dispatch) => {
 };
 
 type SettingsProps = ScreenProps & {
-  settings: SettingsState,
-  saveSettings: (settings: SettingsState) => void,
+  statics: StaticState;
+  settings: SettingsState;
+  saveSettings: (settings: SettingsState) => void;
 };
 
 type State = {
@@ -34,7 +35,7 @@ export class Settings extends Component<SettingsProps, State> {
 
   state = {
     settings: defaultSettings,
-    tab: SettingsTab.API,
+    tab: SettingsTab.Trading,
   };
 
   static getDerivedStateFromProps(nextProps: SettingsProps): State {
