@@ -1,27 +1,27 @@
-import { getBalance, auth } from '../../services/kraken';
-import { Balance } from '../../domain';
-import { displayDanger } from './notification';
 import { Dispatch, GetState } from '.';
+import { Balance } from '../../domain';
+import { auth, getBalance } from '../../services/kraken';
+import { displayDanger } from './notification';
 
-export const LOAD = "balance/load";
-export const LOADED = "balance/loaded";
+export const LOAD_BALANCE = "balance/load";
+export const LOADED_BALANCE = "balance/loaded";
 
-type Load = typeof LOAD;
-type Loaded = typeof LOADED;
+type LoadBalance = typeof LOAD_BALANCE;
+type LoadedBalance = typeof LOADED_BALANCE;
 
-export type LoadAction = { type: Load };
-export type LoadedAction = { type: Loaded, payload: Balance[] };
+export type LoadBalanceAction = { type: LoadBalance };
+export type LoadedBalanceAction = { type: LoadedBalance, payload: Balance[] };
 
 export type BalanceAction =
-  LoadAction |
-  LoadedAction;
+  LoadBalanceAction |
+  LoadedBalanceAction;
 
-export const loadedBalances = (payload: Balance[]): LoadedAction =>
-  ({ type: LOADED, payload });
+export const loadedBalances = (payload: Balance[]): BalanceAction =>
+  ({ type: LOADED_BALANCE, payload });
 
 export const loadBalancesThunk = () =>
   async (dispatch: Dispatch, getState: GetState) => {
-    dispatch({ type: LOAD });
+    dispatch({ type: LOAD_BALANCE });
     const _auth = auth(getState().settings);
     try {
       const balances = await getBalance(_auth);

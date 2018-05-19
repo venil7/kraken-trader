@@ -1,7 +1,7 @@
 import { Order } from '../../domain';
-import { OrderAction, LOAD_OPEN, LOADED_OPEN, LOADED_CLOSED, LOAD_CLOSED } from '../actions/order';
-import { EMPTY, LOADING, SUCCESS, Loadable } from './loading';
-import { EXPIRED, Expirable, expireInMinute, expireInHour } from './expire';
+import { LOADED_CLOSED, LOADED_OPEN, LOAD_CLOSED, LOAD_OPEN, OrderAction } from '../actions/order';
+import { EXPIRED, Expirable, expireInHour } from './expire';
+import { Loadable, LoadingState } from './loading';
 
 export type OrdersState = Expirable & Loadable & {
   openOrders: Order[],
@@ -9,7 +9,7 @@ export type OrdersState = Expirable & Loadable & {
 };
 
 const initialState: OrdersState = {
-  loading: EMPTY,
+  loading: LoadingState.Empty,
   openOrders: [],
   closedOrders: [],
   expires: EXPIRED,
@@ -18,21 +18,24 @@ const initialState: OrdersState = {
 const orders = (state: OrdersState = initialState, action: OrderAction) => {
   switch (action.type) {
     case LOAD_OPEN:
-      return { ...state, loading: LOADING, openOrders: [] };
+      return { ...state, loading: LoadingState.Loading, openOrders: [] };
     case LOADED_OPEN:
       return {
-        ...state, loading: SUCCESS,
+        ...state,
+        loading: LoadingState.Success,
         openOrders: action.payload,
         expires: expireInHour()
       };
     case LOAD_CLOSED:
       return {
-        ...state, loading: LOADING,
+        ...state,
+        loading: LoadingState.Loading,
         closedOrders: []
       };
     case LOADED_CLOSED:
       return {
-        ...state, loading: SUCCESS,
+        ...state,
+        loading: LoadingState.Success,
         closedOrders: action.payload,
         expires: expireInHour()
       };

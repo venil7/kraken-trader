@@ -1,84 +1,71 @@
-import React from 'react'
-import { Component } from 'react';
-// import * as Redux from 'redux';
-import { Content, Text } from 'native-base';
-import { Screen, ScreenProps } from '../common/index';
-import { connect } from 'react-redux';
-import { GlobalState } from '../../redux/reducers';
-import { BalanceAction, loadBalancesThunk } from '../../redux/actions/balance';
-import { Auth, auth } from '../../services/kraken';
-import { BalanceState } from '../../redux/reducers/balance';
-import { BalanceCard } from './balance-card';
-import { loadOpenOrdersThunk, loadClosedOrdersThunk } from '../../redux/actions/order';
-import { OrdersCard } from './orders-card';
-import { OrdersState } from '../../redux/reducers/orders';
-import { isLoading } from '../../redux/reducers/loading';
-import { Dispatch } from '../../redux/actions';
+import { Content } from "native-base";
+import * as React from "react";
+import { Component } from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "../../redux/actions";
+import { loadBalancesThunk } from "../../redux/actions/balance";
+import { loadClosedOrdersThunk, loadOpenOrdersThunk } from "../../redux/actions/order";
+import { loadTickersThunk } from "../../redux/actions/ticker";
+import { GlobalState } from "../../redux/reducers";
+import { BalanceState } from "../../redux/reducers/balance";
+import { isLoading } from "../../redux/reducers/loading";
+import { OrdersState } from "../../redux/reducers/orders";
+import { SettingsState } from "../../redux/reducers/settings";
+import { TickerState } from "../../redux/reducers/ticker";
+import { Screen, ScreenProps } from "../common/index";
+import { BalanceCard } from "./balance-card";
+import { OrdersCard } from "./orders-card";
 
-// type Dispatch = Redux.Dispatch<BalanceAction, any>;
-
-const stateToProps = ({ balance, orders, settings }: GlobalState) => {
+const stateToProps = ({ balance, orders, ticker, settings }: GlobalState) => {
   return {
     balance,
     orders,
-    auth: auth(settings)
+    ticker,
+    settings,
   };
 };
 
 const dispatchToProps = (dispatch: Dispatch) => {
   return {
-    loadBalances: (auth: Auth) => dispatch(loadBalancesThunk(auth)),
-    loadOpenOrders: (auth: Auth) => dispatch(loadOpenOrdersThunk(auth)),
-    loadClosedOrders: (auth: Auth) => dispatch(loadClosedOrdersThunk(auth)),
+    refresh: async () => {
+      await dispatch(loadBalancesThunk());
+      await dispatch(loadTickersThunk());
+      await dispatch(loadOpenOrdersThunk());
+      await dispatch(loadClosedOrdersThunk());
+    }
   };
 };
 
 type HomeProps = ScreenProps & {
-  balance: BalanceState,
-  orders: OrdersState,
-  loadBalances: (auth: Auth) => void,
-  loadOpenOrders: (auth: Auth) => void,
-  loadClosedOrders: (auth: Auth) => void,
-  auth: Auth
-};
-
-type HomeState = {
-  auth: Auth
+  balance: BalanceState;
+  orders: OrdersState;
+  ticker: TickerState;
+  settings: SettingsState;
+  refresh: () => void;
 };
 
 @connect(stateToProps, dispatchToProps)
-export class Home extends Component<HomeProps, HomeState> {
-
-  refresh = async () => {
-    const { loadBalances, loadOpenOrders, loadClosedOrders, auth } = this.props;
-    if (auth.cred) {
-      await loadBalances(auth);
-      await loadOpenOrders(auth);
-      await loadClosedOrders(auth);
-    }
-  };
-
+export class Home extends Component<HomeProps, any> {
   render() {
-    const { balance, orders, navigation } = this.props;
+    const { balance, orders, navigation, ticker, settings } = this.props;
+    const { excludeZeroBalance } = settings;
+    const balances = balance.balances
+      .filter(b => excludeZeroBalance ? b.balance > 0 : true)
     const loading = isLoading(balance.loading, orders.loading);
     return (
       <Screen
-        title="Kraken"
-        onRefresh={this.refresh}
+        title="Kraken Trader"
+        onRefresh={this.props.refresh}
         navigation={navigation}
         loading={loading}
         render={() => (
           <Content>
-            <BalanceCard
-              balances={balance.balances} />
-            <OrdersCard
-              title="Open Orders"
-              orders={orders.openOrders} />
-            <OrdersCard
-              title="Closed Orders"
-              orders={orders.closedOrders} />
+            <BalanceCard balances={balances} tickers={ticker.tickers} />
+            <OrdersCard title="Open Orders" orders={orders.openOrders} />
+            <OrdersCard title="Closed Orders" orders={orders.closedOrders} />
           </Content>
-        )} />
+        )}
+      />
     );
   }
 }

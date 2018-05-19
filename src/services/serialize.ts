@@ -1,5 +1,5 @@
-import { getItem, setItem } from './storage';
 import { GlobalState, reducer } from '../redux/reducers';
+import { getItem, setItem } from './storage';
 const STORE = 'store';
 
 export const getSerializedStore = async (): Promise<GlobalState> => {
@@ -7,7 +7,7 @@ export const getSerializedStore = async (): Promise<GlobalState> => {
   return store;
 };
 
-export const saveStore = async (store: GlobalState): Promise<GlobalState> => {
+export const serializeStore = async (store: GlobalState): Promise<GlobalState> => {
   await setItem(STORE, store);
   return store;
 };

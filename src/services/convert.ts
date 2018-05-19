@@ -1,40 +1,6 @@
 /// <reference path="kraken-wrapper.d.ts" />
-import { ApiOrder, ApiAsset, ApiTradableAssetPair, ApiTicker, ApiOHLCRow } from 'kraken-wrapper';
-import { Order, Status, OrderType, Asset, TradableAssetPair, Ticker, Pair, CurrencyType, OhlcRow } from "../domain";
-import { Symbol } from '../domain';
-
-export const toOrder = (id: string, body: ApiOrder): Order => {
-  const { descr } = body;
-  const [base, quote] = pairToSymbols(descr.pair as Pair);
-  return {
-    id,
-    refid: body.refid,
-    userref: body.userref,
-    status: <Status>body.status,
-    opentm: body.opentm,
-    starttm: body.starttm,
-    expiretm: body.expiretm,
-    pair: <Pair>descr.pair,
-    type: <OrderType>descr.type,
-    ordertype: descr.ordertype,
-    price: parseFloat(descr.price),
-    price2: parseFloat(descr.price2),
-    leverage: descr.leverage,
-    order: descr.order,
-    close: descr.close,
-    base: base,
-    quote: quote,
-    vol: parseFloat(body.vol),
-    vol_exec: parseFloat(body.vol_exec),
-    cost: parseFloat(body.cost),
-    fee: parseFloat(body.fee),
-    actualPrice: parseFloat(body.price),
-    stopprice: parseFloat(body.stopprice),
-    limitprice: parseFloat(body.limitprice),
-    misc: body.misc,
-    oflags: body.oflags
-  };
-};
+import { ApiAsset, ApiOHLCRow, ApiOrder, ApiTicker, ApiTradableAssetPair } from 'kraken-wrapper';
+import { Asset, CurrencyType, OhlcRow, Order, OrderType, Pair, Status, Symbol, Ticker, TradableAssetPair } from "../domain";
 
 export const toAsset = (symbol: string, asset: ApiAsset): Asset => {
   const type = symbol.startsWith('Z') ? CurrencyType.Fiat : CurrencyType.Crypto;
@@ -45,34 +11,157 @@ export const toTradableAssetPair = (pair: string, assetPair: ApiTradableAssetPai
   return { ...assetPair, pair } as TradableAssetPair;
 };
 
-export const toTicker = (pair: string, ticker: ApiTicker): Ticker => {
-  const [ask] = ticker.a;
-  const [bid] = ticker.b;
-  const [last] = ticker.c;
-  const [volume] = ticker.v;
-  const [volumeWeightedAverage] = ticker.p;
-  const [numberOfTrades] = ticker.t;
-  const [low] = ticker.l;
-  const [high] = ticker.h;
-  const [opening] = ticker.o;
+export const toPair = (pairName: string): Pair => {
+  switch (pairName) {
+    case 'BCHUSD':
+    case 'XBCHZUSD': return Pair.BCH_USD;
+    case 'BCHXBT':
+    case 'XBCHXXBT': return Pair.BCH_XBT;
+    case 'DASHEUR':
+    case 'XDASHZEUR': return Pair.DASH_EUR;
+    case 'DASHUSD':
+    case 'XDASHZUSD': return Pair.DASH_USD;
+    case 'DASHXBT':
+    case 'XDASHXXBT': return Pair.DASH_XBT;
+    case 'EOSETH':
+    case 'XEOSXETH': return Pair.EOS_ETH;
+    case 'EOSEUR':
+    case 'XEOSZEUR': return Pair.EOS_EUR;
+    case 'EOSUSD':
+    case 'XEOSZUSD': return Pair.EOS_USD;
+    case 'EOSXBT':
+    case 'XEOSXXBT': return Pair.EOS_XBT;
+    case 'GNOETH':
+    case 'XGNOXETH': return Pair.GNO_ETH;
+    case 'GNOEUR':
+    case 'XGNOZEUR': return Pair.GNO_EUR;
+    case 'GNOUSD':
+    case 'XGNOZUSD': return Pair.GNO_USD;
+    case 'GNOXBT':
+    case 'XGNOXXBT': return Pair.GNO_XBT;
+    case 'USDTUSD':
+    case 'ZUSDTZUSD': return Pair.USDT_USD;
+    case 'ETCETH':
+    case 'XETCXETH': return Pair.ETC_ETH;
+    case 'ETCXBT':
+    case 'XETCXXBT': return Pair.ETC_XBT;
+    case 'ETCEUR':
+    case 'XETCZEUR': return Pair.ETC_EUR;
+    case 'ETCUSD':
+    case 'XETCZUSD': return Pair.ETC_USD;
+    case 'ETHXBT':
+    case 'XETHXXBT': return Pair.ETH_XBT;
+    case 'ETHCAD':
+    case 'XETHZCAD': return Pair.ETH_CAD;
+    case 'ETHEUR':
+    case 'XETHZEUR': return Pair.ETH_EUR;
+    case 'ETHGBP':
+    case 'XETHZGBP': return Pair.ETH_GBP;
+    case 'ETHJPY':
+    case 'XETHZJPY': return Pair.ETH_JPY;
+    case 'ETHUSD':
+    case 'XETHZUSD': return Pair.ETH_USD;
+    case 'ICNETH':
+    case 'XICNXETH': return Pair.ICN_ETH;
+    case 'ICNXBT':
+    case 'XICNXXBT': return Pair.ICN_XBT;
+    case 'LTCXBT':
+    case 'XLTCXXBT': return Pair.LTC_XBT;
+    case 'LTCEUR':
+    case 'XLTCZEUR': return Pair.LTC_EUR;
+    case 'LTCUSD':
+    case 'XLTCZUSD': return Pair.LTC_USD;
+    case 'MLNETH':
+    case 'XMLNXETH': return Pair.MLN_ETH;
+    case 'MLNXBT':
+    case 'XMLNXXBT': return Pair.MLN_XBT;
+    case 'REPETH':
+    case 'XREPXETH': return Pair.REP_ETH;
+    case 'REPXBT':
+    case 'XREPXXBT': return Pair.REP_XBT;
+    case 'REPEUR':
+    case 'XREPZEUR': return Pair.REP_EUR;
+    case 'REPUSD':
+    case 'XREPZUSD': return Pair.REP_USD;
+    case 'XBTCAD':
+    case 'XXBTZCAD': return Pair.XBT_CAD;
+    case 'XBTEUR':
+    case 'XXBTZEUR': return Pair.XBT_EUR;
+    case 'XBTGBP':
+    case 'XXBTZGBP': return Pair.XBT_GBP;
+    case 'XBTJPY':
+    case 'XXBTZJPY': return Pair.XBT_JPY;
+    case 'XBTUSD':
+    case 'XXBTZUSD': return Pair.XBT_USD;
+    case 'XDGXBT':
+    case 'XXDGXXBT': return Pair.XDG_XBT;
+    case 'XLMXBT':
+    case 'XXLMXXBT': return Pair.XLM_XBT;
+    case 'XLMEUR':
+    case 'XXLMZEUR': return Pair.XLM_EUR;
+    case 'XLMUSD':
+    case 'XXLMZUSD': return Pair.XLM_USD;
+    case 'XMRXBT':
+    case 'XXMRXXBT': return Pair.XMR_XBT;
+    case 'XMREUR':
+    case 'XXMRZEUR': return Pair.XMR_EUR;
+    case 'XMRUSD':
+    case 'XXMRZUSD': return Pair.XMR_USD;
+    case 'XRPXBT':
+    case 'XXRPXXBT': return Pair.XRP_XBT;
+    case 'XRPCAD':
+    case 'XXRPZCAD': return Pair.XRP_CAD;
+    case 'XRPEUR':
+    case 'XXRPZEUR': return Pair.XRP_EUR;
+    case 'XRPJPY':
+    case 'XXRPZJPY': return Pair.XRP_JPY;
+    case 'XRPUSD':
+    case 'XXRPZUSD': return Pair.XRP_USD;
+    case 'ZECXBT':
+    case 'XZECXXBT': return Pair.ZEC_XBT;
+    case 'ZECEUR':
+    case 'XZECZEUR': return Pair.ZEC_EUR;
+    case 'ZECJPY':
+    case 'XZECZJPY': return Pair.ZEC_JPY;
+    case 'ZECUSD':
+    case 'XZECZUSD': return Pair.ZEC_USD;
+    default:
+      throw new Error('Unknown pair');
+  }
+};
+
+export const toTicker = (pairName: string, quote: Symbol, tickerInfo: ApiTicker): Ticker => {
+  const [ask] = tickerInfo.a;
+  const [bid] = tickerInfo.b;
+  const [last] = tickerInfo.c;
+  const [volume] = tickerInfo.v;
+  const [volumeWeightedAverage] = tickerInfo.p;
+  const [numberOfTrades] = tickerInfo.t;
+  const [low] = tickerInfo.l;
+  const [high] = tickerInfo.h;
+  const [opening] = tickerInfo.o;
+  const pair = toPair(pairName);
+  const [base] = pairToSymbols(pair).filter(s => s !== quote);
   return {
-    pair: <Pair>pair,
-    ask,
-    bid,
-    last,
-    volume,
-    volumeWeightedAverage,
-    numberOfTrades,
-    low,
-    high,
-    opening,
+    pair,
+    base,
+    quote,
+    ask: parseFloat(ask),
+    bid: parseFloat(bid),
+    last: parseFloat(last),
+    volume: parseFloat(volume),
+    volumeWeightedAverage: parseFloat(volumeWeightedAverage),
+    numberOfTrades: parseFloat(numberOfTrades),
+    low: parseFloat(low),
+    high: parseFloat(high),
+    opening: parseFloat(opening),
   };
 };
 
-export const toOhlcRow = (pair: string, row: ApiOHLCRow): OhlcRow => {
+export const toOhlcRow = (pairName: string, row: ApiOHLCRow): OhlcRow => {
   const [time, open, high, low, close, vwap, volume, count] = row;
   return {
-    pair: pair as Pair,
+    pair: toPair(pairName),
     time,
     open: parseFloat(open),
     high: parseFloat(high),
@@ -116,18 +205,40 @@ export const symbolToLetter = (symbol: Symbol): string => {
     case Symbol.XBT: return '฿';
     case Symbol.LTC: return 'Ł';
     case Symbol.XDG: return 'Ð';
-    case Symbol.XRP: return '₹ ';
+    case Symbol.XRP: return '₹';
     case Symbol.ETH: return 'Ξ';
     case Symbol.ETC: return 'ΞC';
     case Symbol.USDT: return '$T';
     case Symbol.XMR: return 'ɱ';
-    case Symbol.GBP: return 'ɃC';
+    case Symbol.BCH: return 'ɃC';
+    case Symbol.GBP: return '£';
     case Symbol.EUR: return '€';
-    case Symbol.JPY: return '$';
-    case Symbol.USD: return '¥';
+    case Symbol.JPY: return '¥';
+    case Symbol.USD: return '$';
     case Symbol.CAD: return '$C';
     default: return symbolToName(symbol)[0];
   }
+};
+
+export const toPairs = (base: Symbol, symbols: Symbol[]): Pair[] =>
+  symbols.reduce((acc: Pair[], symbol) => {
+    const pair = symbolsToPair(symbol, base);
+    return (pair) ? [...acc, pair] : acc;
+  }, []);
+
+export const symbolToShortCode = (symbol: Symbol): string => {
+  const SYMBOL_REGEX = /(X|Z)([A-Z]{3,})/;
+  const [, , code = symbol.toString()] = SYMBOL_REGEX.exec(symbol.toString()) || [];
+  return code;
+};
+
+export const symbolsToPair = (symbol1: Symbol, symbol2: Symbol): Pair | null => {
+  const pairs: string[] = Object.values(Pair);
+  const _SymbolToPair = (symbol1: Symbol, symbol2: Symbol): Pair | null => {
+    const pairName = `${symbolToShortCode(symbol1)}${symbolToShortCode(symbol2)}`;
+    return pairs.includes(pairName) ? <Pair>pairName : null;
+  };
+  return _SymbolToPair(symbol1, symbol2) || _SymbolToPair(symbol2, symbol1);
 };
 
 export const format = (n: number, decimals = 5) => {
@@ -170,17 +281,17 @@ export const pairToSymbols = (pair: Pair): [Symbol, Symbol] => {
     case Pair.ETC_EUR: return [Symbol.ETC, Symbol.EUR];
     case Pair.ETC_USD: return [Symbol.ETC, Symbol.USD];
     case Pair.ETH_XBT: return [Symbol.ETH, Symbol.XBT];
-    case Pair.ETH_XBT_d: return [Symbol.ETH, Symbol.XBT];
+    // case Pair.ETH_XBT_d: return [Symbol.ETH, Symbol.XBT];
     case Pair.ETH_CAD: return [Symbol.ETH, Symbol.CAD];
-    case Pair.ETH_CAD_d: return [Symbol.ETH, Symbol.CAD];
+    // case Pair.ETH_CAD_d: return [Symbol.ETH, Symbol.CAD];
     case Pair.ETH_EUR: return [Symbol.ETH, Symbol.EUR];
-    case Pair.ETH_EUR_d: return [Symbol.ETH, Symbol.EUR];
+    // case Pair.ETH_EUR_d: return [Symbol.ETH, Symbol.EUR];
     case Pair.ETH_GBP: return [Symbol.ETH, Symbol.GBP];
-    case Pair.ETH_GBP_d: return [Symbol.ETH, Symbol.GBP];
+    // case Pair.ETH_GBP_d: return [Symbol.ETH, Symbol.GBP];
     case Pair.ETH_JPY: return [Symbol.ETH, Symbol.JPY];
-    case Pair.ETH_JPY_d: return [Symbol.ETH, Symbol.JPY];
+    // case Pair.ETH_JPY_d: return [Symbol.ETH, Symbol.JPY];
     case Pair.ETH_USD: return [Symbol.ETH, Symbol.USD];
-    case Pair.ETH_USD_d: return [Symbol.ETH, Symbol.USD];
+    // case Pair.ETH_USD_d: return [Symbol.ETH, Symbol.USD];
     case Pair.ICN_ETH: return [Symbol.ICN, Symbol.ETH];
     case Pair.ICN_XBT: return [Symbol.ICN, Symbol.XBT];
     case Pair.LTC_XBT: return [Symbol.LTC, Symbol.XBT];
@@ -193,15 +304,15 @@ export const pairToSymbols = (pair: Pair): [Symbol, Symbol] => {
     case Pair.REP_EUR: return [Symbol.REP, Symbol.EUR];
     case Pair.REP_USD: return [Symbol.REP, Symbol.USD];
     case Pair.XBT_CAD: return [Symbol.XBT, Symbol.CAD];
-    case Pair.XBT_CAD_d: return [Symbol.XBT, Symbol.CAD];
+    // case Pair.XBT_CAD_d: return [Symbol.XBT, Symbol.CAD];
     case Pair.XBT_EUR: return [Symbol.XBT, Symbol.EUR];
-    case Pair.XBT_EUR_d: return [Symbol.XBT, Symbol.EUR];
+    // case Pair.XBT_EUR_d: return [Symbol.XBT, Symbol.EUR];
     case Pair.XBT_GBP: return [Symbol.XBT, Symbol.GBP];
-    case Pair.XBT_GBP_d: return [Symbol.XBT, Symbol.GBP];
+    // case Pair.XBT_GBP_d: return [Symbol.XBT, Symbol.GBP];
     case Pair.XBT_JPY: return [Symbol.XBT, Symbol.JPY];
-    case Pair.XBT_JPY_d: return [Symbol.XBT, Symbol.JPY];
+    // case Pair.XBT_JPY_d: return [Symbol.XBT, Symbol.JPY];
     case Pair.XBT_USD: return [Symbol.XBT, Symbol.USD];
-    case Pair.XBT_USD_d: return [Symbol.XBT, Symbol.USD];
+    // case Pair.XBT_USD_d: return [Symbol.XBT, Symbol.USD];
     case Pair.XDG_XBT: return [Symbol.XDG, Symbol.XBT];
     case Pair.XLM_XBT: return [Symbol.XLM, Symbol.XBT];
     case Pair.XLM_EUR: return [Symbol.XLM, Symbol.EUR];
@@ -218,6 +329,40 @@ export const pairToSymbols = (pair: Pair): [Symbol, Symbol] => {
     case Pair.ZEC_EUR: return [Symbol.ZEC, Symbol.EUR];
     case Pair.ZEC_JPY: return [Symbol.ZEC, Symbol.JPY];
     case Pair.ZEC_USD: return [Symbol.ZEC, Symbol.USD];
-    default: return [Symbol.XBT, Symbol.USD];
+    default:
+      throw new Error('unknown pair');
   }
+};
+
+export const toOrder = (id: string, body: ApiOrder): Order => {
+  const { descr } = body;
+  const [base, quote] = pairToSymbols(descr.pair as Pair);
+  return {
+    id,
+    refid: body.refid,
+    userref: body.userref,
+    status: <Status>body.status,
+    opentm: body.opentm,
+    starttm: body.starttm,
+    expiretm: body.expiretm,
+    pair: <Pair>descr.pair,
+    type: <OrderType>descr.type,
+    ordertype: descr.ordertype,
+    price: parseFloat(descr.price),
+    price2: parseFloat(descr.price2),
+    leverage: descr.leverage,
+    order: descr.order,
+    close: descr.close,
+    base: base,
+    quote: quote,
+    vol: parseFloat(body.vol),
+    vol_exec: parseFloat(body.vol_exec),
+    cost: parseFloat(body.cost),
+    fee: parseFloat(body.fee),
+    actualPrice: parseFloat(body.price),
+    stopprice: parseFloat(body.stopprice),
+    limitprice: parseFloat(body.limitprice),
+    misc: body.misc,
+    oflags: body.oflags
+  };
 };

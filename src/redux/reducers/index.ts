@@ -1,19 +1,22 @@
 import { combineReducers } from 'redux';
-import { orders, OrdersState } from './orders';
-import { balance, BalanceState } from './balance';
-import { settings, SettingsState } from './settings';
-import { statics, StaticState } from './static';
+import { BalanceState, balance } from './balance';
+import { OrdersState, orders } from './orders';
+import { SettingsState, settings } from './settings';
+import { StaticState, statics } from './static';
+import { TickerState, ticker } from './ticker';
 
 export type GlobalState = {
   orders: OrdersState,
   balance: BalanceState,
   settings: SettingsState,
   statics: StaticState,
+  ticker: TickerState,
 };
 
 export const reducer = combineReducers<GlobalState>({
-  orders,
-  balance,
   settings,
-  statics
+  balance,
+  statics,
+  orders,
+  ticker,
 });

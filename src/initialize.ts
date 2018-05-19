@@ -1,12 +1,12 @@
 import { Store } from "redux";
-import { auth } from "./services/kraken";
 import { loadBalancesThunk, loadedBalances } from "./redux/actions/balance";
-import { loadOpenClosedOrdersThunk, loadedOpenOrders, loadedClosedOrders } from "./redux/actions/order";
-import { getSerializedStore } from "./services/serialize";
+import { loadOpenClosedOrdersThunk, loadedClosedOrders, loadedOpenOrders } from "./redux/actions/order";
 import { loadedSettings } from "./redux/actions/settings";
-import { expired } from "./redux/reducers/expire";
-import { loadStaticsThunk, loadedStatic, loadedStaticFiat, loadedStaticCrypto } from "./redux/actions/static";
+import { loadStaticsThunk, loadedStaticCrypto, loadedStaticFiat } from "./redux/actions/static";
+import { loadTickersThunk } from "./redux/actions/ticker";
 import { GlobalState } from "./redux/reducers";
+import { expired } from "./redux/reducers/expire";
+import { getSerializedStore } from "./services/serialize";
 
 export const initialize = async (store: Store<GlobalState>) => {
   const { dispatch } = store;
@@ -22,10 +22,14 @@ export const initialize = async (store: Store<GlobalState>) => {
     : dispatch(loadedStaticFiat(statics.fiats)),
     dispatch(loadedStaticCrypto(statics.cryptos));
 
+
   // LOAD/RESTORE BALANCES
   expired(balance)
     ? await dispatch(loadBalancesThunk())
     : dispatch(loadedBalances(balance.balances));
+
+  // LOAD/RESTORE TICKERS
+  await dispatch(loadTickersThunk());
 
   // LOAD/RESTORE ORDERS
   expired(orders)

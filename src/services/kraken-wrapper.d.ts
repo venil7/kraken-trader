@@ -81,15 +81,15 @@ declare module 'kraken-wrapper' {
   };
 
   export type ApiTicker = {
-    a: [number, number, number];
-    b: [number, number, number];
-    c: [number, number];
-    v: [number, number];
-    p: [number, number];
-    t: [number, number];
-    l: [number, number];
-    h: [number, number];
-    o: [number, number];
+    a: [string, string, string];
+    b: [string, string, string];
+    c: [string, string];
+    v: [string, string];
+    p: [string, string];
+    t: [string, string];
+    l: [string, string];
+    h: [string, string];
+    o: [string, string];
   };
 
   export type ApiTickerInformation = ApiError & {

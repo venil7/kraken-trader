@@ -1,7 +1,7 @@
 /// <reference path="kraken-wrapper.d.ts" />
-import KrakenAPI, { ApiOrder, ApiAsset, ApiTicker, ApiOHLCRow, ApiTradableAssetPair } from 'kraken-wrapper';
-import { Balance, Order, Asset, Ticker, Pair, Interval, TradableAssetPair } from '../domain';
-import { toOrder, toAsset, toTicker, toOhlcRow, toTradableAssetPair } from './convert';
+import KrakenAPI, { ApiAsset, ApiOHLCRow, ApiOrder, ApiTicker, ApiTradableAssetPair } from 'kraken-wrapper';
+import { Asset, Balance, Interval, OhlcRow, Order, Pair, Symbol, Ticker, TradableAssetPair } from '../domain';
+import { toAsset, toOhlcRow, toOrder, toPairs, toTicker, toTradableAssetPair } from './convert';
 
 type Obj = { entries: (o: any) => [string, any][] };
 const obj: Obj = Object;
@@ -72,16 +72,19 @@ const getAssetInfo = async (): Promise<Asset[]> => {
 };
 
 type ApiTickerEntry = [string, ApiTicker];
-const getTickerInfo = async (pairs: Pair[]): Promise<Ticker[]> => {
+const getTickerInfo = async (quote: Symbol, symbols: Symbol[]): Promise<Ticker[]> => {
+  const pairs = toPairs(quote, symbols);
+  if (!pairs.length) return [];
   const params = { pair: pairs.map(p => p.toString()).join(',') };
   const { result, error } = await instance().getTickerInformation(params);
   throwOnError(error);
-  const tickers = entries(result).map(([pair, ticker]: ApiTickerEntry) => toTicker(pair, ticker));
+  const tickers = entries(result)
+    .map(([pairName, ticker]: ApiTickerEntry) => toTicker(pairName, quote, ticker));
   return tickers;
 };
 
 type ApiOHLCEntry = [string, ApiOHLCRow];
-const getOHLC = async (pair: Pair, interval: Interval = Interval.Minute): Promise<OHLC> => {
+const getOHLC = async (pair: Pair, interval: Interval = Interval.Minute): Promise<OhlcRow[]> => {
   const params = { pair, interval };
   const { result, error } = await instance().getOHLC(params);
   throwOnError(error);

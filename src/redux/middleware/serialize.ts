@@ -1,11 +1,14 @@
-import { saveStore } from '../../services/serialize';
-import { GlobalState } from '../reducers';
-import { AnyAction } from 'redux';
+import { serializeStore } from '../../services/serialize';
+import { GetState, DispatchableAction } from '../actions';
 
-export const serialize = ({ getState }: { getState: () => GlobalState }) =>
+const serializableAction = (action: DispatchableAction) => true;
+
+export const serialize = ({ getState }: { getState: GetState }) =>
   (next: Function) =>
-    (action: AnyAction) => {
+    (action: DispatchableAction) => {
       const result = next(action);
-      saveStore(getState());
+      if (serializableAction(action)) {
+        serializeStore(getState());
+      }
       return result
     };

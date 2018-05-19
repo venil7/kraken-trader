@@ -1,4 +1,7 @@
-export type Balance = { symbol: Symbol, balance: number };
+export type Balance = {
+  symbol: Symbol,
+  balance: number
+};
 
 export enum Status {
   Open = "open",
@@ -67,17 +70,17 @@ export enum Pair {
   ETC_EUR = "ETCEUR",
   ETC_USD = "ETCUSD",
   ETH_XBT = "ETHXBT",
-  ETH_XBT_d = "ETHXBT.d",
+  // ETH_XBT_d = "ETHXBT.d",
   ETH_CAD = "ETHCAD",
-  ETH_CAD_d = "ETHCAD.d",
+  // ETH_CAD_d = "ETHCAD.d",
   ETH_EUR = "ETHEUR",
-  ETH_EUR_d = "ETHEUR.d",
+  // ETH_EUR_d = "ETHEUR.d",
   ETH_GBP = "ETHGBP",
-  ETH_GBP_d = "ETHGBP.d",
+  // ETH_GBP_d = "ETHGBP.d",
   ETH_JPY = "ETHJPY",
-  ETH_JPY_d = "ETHJPY.d",
+  // ETH_JPY_d = "ETHJPY.d",
   ETH_USD = "ETHUSD",
-  ETH_USD_d = "ETHUSD.d",
+  // ETH_USD_d = "ETHUSD.d",
   ICN_ETH = "ICNETH",
   ICN_XBT = "ICNXBT",
   LTC_XBT = "LTCXBT",
@@ -85,20 +88,20 @@ export enum Pair {
   LTC_USD = "LTCUSD",
   MLN_ETH = "MLNETH",
   MLN_XBT = "MLNXBT",
-  REP_ETH = "XREPETH",
-  REP_XBT = "XREPXBT",
-  REP_EUR = "XREPEUR",
-  REP_USD = "XREPUSD",
+  REP_ETH = "REPETH",
+  REP_XBT = "REPXBT",
+  REP_EUR = "REPEUR",
+  REP_USD = "REPUSD",
   XBT_CAD = "XBTCAD",
-  XBT_CAD_d = "XBTCAD.d",
+  // XBT_CAD_d = "XBTCAD.d",
   XBT_EUR = "XBTEUR",
-  XBT_EUR_d = "XBTEUR.d",
+  // XBT_EUR_d = "XBTEUR.d",
   XBT_GBP = "XBTGBP",
-  XBT_GBP_d = "XBTGBP.d",
+  // XBT_GBP_d = "XBTGBP.d",
   XBT_JPY = "XBTJPY",
-  XBT_JPY_d = "XBTJPY.d",
+  // XBT_JPY_d = "XBTJPY.d",
   XBT_USD = "XBTUSD",
-  XBT_USD_d = "XBTUSD.d",
+  // XBT_USD_d = "XBTUSD.d",
   XDG_XBT = "XDGXBT",
   XLM_XBT = "XLMXBT",
   XLM_EUR = "XLMEUR",
@@ -177,6 +180,8 @@ export type TradableAssetPair = {
 
 export type Ticker = {
   pair: Pair,
+  base: Symbol,
+  quote: Symbol,
   ask: number;
   bid: number;
   last: number;
