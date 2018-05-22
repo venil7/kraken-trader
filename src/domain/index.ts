@@ -3,6 +3,10 @@ export type Balance = {
   balance: number
 };
 
+export type BalanceWithTicker = Balance & {
+  ticker?: Ticker;
+}
+
 export enum Status {
   Open = "open",
   Closed = "closed",

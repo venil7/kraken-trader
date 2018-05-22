@@ -2,28 +2,27 @@ import { Content } from "native-base";
 import * as React from "react";
 import { Component } from "react";
 import { connect } from "react-redux";
+import { createSelector } from "reselect";
 import { Dispatch } from "../../redux/actions";
 import { loadBalancesThunk } from "../../redux/actions/balance";
 import { loadClosedOrdersThunk, loadOpenOrdersThunk } from "../../redux/actions/order";
 import { loadTickersThunk } from "../../redux/actions/ticker";
-import { GlobalState } from "../../redux/reducers";
-import { BalanceState } from "../../redux/reducers/balance";
+import { BalanceWithTickerState } from "../../redux/reducers/balance";
 import { isLoading } from "../../redux/reducers/loading";
 import { OrdersState } from "../../redux/reducers/orders";
 import { SettingsState } from "../../redux/reducers/settings";
-import { TickerState } from "../../redux/reducers/ticker";
+import { balancesWithTickerTotalSelector, ordersSelector, settingsSelector, userBalancesWithTickerSelector } from "../../redux/selectors";
 import { Screen, ScreenProps } from "../common/index";
 import { BalanceCard } from "./balance-card";
 import { OrdersCard } from "./orders-card";
 
-const stateToProps = ({ balance, orders, ticker, settings }: GlobalState) => {
-  return {
-    balance,
-    orders,
-    ticker,
-    settings,
-  };
-};
+const stateToProps = createSelector(
+  userBalancesWithTickerSelector,
+  balancesWithTickerTotalSelector,
+  settingsSelector,
+  ordersSelector,
+  (balance, total, settings, orders) => ({ balance, orders, total, settings })
+);
 
 const dispatchToProps = (dispatch: Dispatch) => {
   return {
@@ -37,9 +36,9 @@ const dispatchToProps = (dispatch: Dispatch) => {
 };
 
 type HomeProps = ScreenProps & {
-  balance: BalanceState;
+  balance: BalanceWithTickerState;
   orders: OrdersState;
-  ticker: TickerState;
+  total: number;
   settings: SettingsState;
   refresh: () => void;
 };
@@ -47,10 +46,8 @@ type HomeProps = ScreenProps & {
 @connect(stateToProps, dispatchToProps)
 export class Home extends Component<HomeProps, any> {
   render() {
-    const { balance, orders, navigation, ticker, settings } = this.props;
-    const { excludeZeroBalance } = settings;
-    const balances = balance.balances
-      .filter(b => excludeZeroBalance ? b.balance > 0 : true)
+    const { balance, orders, navigation, total, settings } = this.props;
+    const { balances } = balance;
     const loading = isLoading(balance.loading, orders.loading);
     return (
       <Screen
@@ -60,7 +57,7 @@ export class Home extends Component<HomeProps, any> {
         loading={loading}
         render={() => (
           <Content>
-            <BalanceCard balances={balances} tickers={ticker.tickers} />
+            <BalanceCard balances={balances} total={total} totalSymbol={settings.prefFiat} />
             <OrdersCard title="Open Orders" orders={orders.openOrders} />
             <OrdersCard title="Closed Orders" orders={orders.closedOrders} />
           </Content>

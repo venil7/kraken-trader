@@ -2,8 +2,12 @@
 import { ApiAsset, ApiOHLCRow, ApiOrder, ApiTicker, ApiTradableAssetPair } from 'kraken-wrapper';
 import { Asset, CurrencyType, OhlcRow, Order, OrderType, Pair, Status, Symbol, Ticker, TradableAssetPair } from "../domain";
 
+export const currencyType = (symbol: Symbol | string) => symbol.toString().startsWith('Z')
+  ? CurrencyType.Fiat
+  : CurrencyType.Crypto;
+
 export const toAsset = (symbol: string, asset: ApiAsset): Asset => {
-  const type = symbol.startsWith('Z') ? CurrencyType.Fiat : CurrencyType.Crypto;
+  const type = currencyType(symbol);
   return { ...asset, symbol, type } as Asset;
 };
 
@@ -254,8 +258,12 @@ export const format = (n: number, decimals = 5) => {
   return res;
 };
 
-export const toAmount = (amount: number, symbol: Symbol): string =>
-  `${symbolToLetter(symbol)}${format(amount)}`;
+export const toAmount = (amount: number, symbol: Symbol): string => {
+  const letter = symbolToLetter(symbol);
+  const isFiat = currencyType(symbol) === CurrencyType.Fiat;
+  const num = format(amount, isFiat ? 2 : 5);
+  return `${letter}${num}`;
+}
 
 export const orderToText = (order: Order): string =>
   `${toAmount(order.vol, order.base)} @ ${toAmount(order.price, order.quote)}`;

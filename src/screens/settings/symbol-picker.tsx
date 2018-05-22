@@ -1,6 +1,6 @@
-import React from "react";
 import { Picker } from "native-base";
-import { Symbol, Asset } from "../../domain";
+import React from "react";
+import { Symbol } from "../../domain";
 import { symbolToName } from "../../services/convert";
 
 export type SymbolPickerProps = {
@@ -9,7 +9,7 @@ export type SymbolPickerProps = {
   onSelect: (s: Symbol) => void;
 };
 
-export const SymbolPicker = (props: SymbolPickerProps) => (console.log(props), (
+export const SymbolPicker = (props: SymbolPickerProps) => (
   <Picker
     mode="dropdown"
     selectedValue={props.selected}
@@ -22,4 +22,4 @@ export const SymbolPicker = (props: SymbolPickerProps) => (console.log(props), (
         value={symbol} />
     ))}
   </Picker>
-));
+);

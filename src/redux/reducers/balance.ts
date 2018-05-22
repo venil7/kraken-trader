@@ -1,11 +1,13 @@
-import { Balance } from '../../domain';
+import { Balance, BalanceWithTicker } from '../../domain';
 import { BalanceAction, LOADED_BALANCE, LOAD_BALANCE } from '../actions/balance';
 import { EXPIRED, Expirable, expireInHour } from './expire';
 import { Loadable, LoadingState } from './loading';
 
-export type BalanceState = Expirable & Loadable & {
-  balances: Balance[];
+export type BalanceState<B extends Balance = Balance> = Expirable & Loadable & {
+  balances: B[];
 };
+
+export type BalanceWithTickerState = BalanceState<BalanceWithTicker>;
 
 const initState: BalanceState = {
   loading: LoadingState.Empty,

@@ -1,40 +1,36 @@
 import { Body, Card, CardItem, Left, List, ListItem, Right, Text } from "native-base";
 import * as React from 'react';
-import { Balance, Symbol, Ticker } from "../../domain";
+import { BalanceWithTicker, Symbol, Ticker } from "../../domain";
 import { symbolToName, toAmount } from "../../services/convert";
 import { hideIfNoData } from "../common/hide";
 import { CryptoIcon } from "./crypto-icon";
 
 export type BalanceCardProps = {
-  balances: Balance[];
-  tickers: Ticker[];
+  balances: BalanceWithTicker[];
+  total: number;
+  totalSymbol: Symbol;
 };
 
-const tickerForSymbol = (tickers: Ticker[]) => (base: Symbol) =>
-  tickers.find(t => t.base === base);
-
-type TickerProps = { ticker?: Ticker };
-const TickerText = ({ ticker }: TickerProps) => ticker
+type LastProps = { ticker?: Ticker };
+const Last = ({ ticker }: LastProps) => ticker
   ? <Text note>{toAmount(ticker.last, ticker.quote)}</Text>
   : null;
 
-
-const BalanceCard_ = ({ balances, tickers }: BalanceCardProps) => {
-  const ticker = tickerForSymbol(tickers);
+const BalanceCard_ = ({ balances, total, totalSymbol }: BalanceCardProps) => {
   return (
     <Card>
       <CardItem header>
-        <Text>Balances:</Text>
+        <Text>Total: {toAmount(total, totalSymbol)}</Text>
       </CardItem>
       <List>
-        {balances.map((balance: Balance) => (
+        {balances.map((balance: BalanceWithTicker) => (
           <ListItem icon key={balance.symbol}>
             <Left>
               <CryptoIcon symbol={balance.symbol} />
             </Left>
             <Body>
               <Text>{symbolToName(balance.symbol)}</Text>
-              <TickerText ticker={ticker(balance.symbol)} />
+              <Last ticker={balance.ticker} />
             </Body>
             <Right>
               <Text>{toAmount(balance.balance, balance.symbol)}</Text>
