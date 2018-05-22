@@ -4,15 +4,17 @@ import { LOADED, SAVED, SettingsAction } from "../actions/settings";
 export type SettingsState = {
   key: string;
   secret: string;
-  excludeZeroBalance: boolean;
   prefFiat: Symbol;
+  excludeZeroBalance: boolean;
+  excludeCancelledOrders: boolean;
 };
 
 export const defaultSettings: SettingsState = {
   key: '',
   secret: '',
+  prefFiat: Symbol.USD,
   excludeZeroBalance: true,
-  prefFiat: Symbol.USD
+  excludeCancelledOrders: true,
 };
 
 export const settings = (state: SettingsState = defaultSettings, action: SettingsAction) => {

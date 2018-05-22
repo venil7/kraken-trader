@@ -1,13 +1,17 @@
 import { createSelector } from "reselect";
-import { BalanceWithTicker, Symbol, Ticker } from "../../domain";
+import { BalanceWithTicker, Status, Symbol, Ticker } from "../../domain";
 import { GlobalState } from "../reducers";
 import { BalanceState, BalanceWithTickerState } from "../reducers/balance";
+import { OrdersState } from "../reducers/orders";
+import { SettingsState } from "../reducers/settings";
+import { StaticState } from "../reducers/static";
+import { TickerState } from "../reducers/ticker";
 
-export const balancesSelector = (state: GlobalState) => state.balance;
-export const ordersSelector = (state: GlobalState) => state.orders;
-export const staticSelector = (state: GlobalState) => state.statics;
-export const tickerSelector = (state: GlobalState) => state.ticker;
-export const settingsSelector = (state: GlobalState) => state.settings;
+export const balancesSelector = ({ balance }: GlobalState): BalanceState => balance;
+export const ordersSelector = ({ orders }: GlobalState): OrdersState => orders;
+export const staticSelector = ({ statics }: GlobalState): StaticState => statics;
+export const tickerSelector = ({ ticker }: GlobalState): TickerState => ticker;
+export const settingsSelector = ({ settings }: GlobalState): SettingsState => settings;
 
 export const userBalancesSelector = createSelector(
   balancesSelector,
@@ -45,4 +49,15 @@ export const balancesWithTickerTotalSelector = createSelector(
       (acc, b) => b.ticker
         ? acc + (b.ticker.last * b.balance)
         : acc, 0)
+);
+
+export const userClosedOrdersSelector = createSelector(
+  [ordersSelector, settingsSelector],
+  (ordersState, { excludeCancelledOrders }): OrdersState => ({
+    ...ordersState,
+    closedOrders: ordersState.closedOrders.filter(
+      order => excludeCancelledOrders
+        ? order.status !== Status.Canceled
+        : true)
+  })
 );

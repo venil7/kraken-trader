@@ -11,7 +11,7 @@ import { BalanceWithTickerState } from "../../redux/reducers/balance";
 import { isLoading } from "../../redux/reducers/loading";
 import { OrdersState } from "../../redux/reducers/orders";
 import { SettingsState } from "../../redux/reducers/settings";
-import { balancesWithTickerTotalSelector, ordersSelector, settingsSelector, userBalancesWithTickerSelector } from "../../redux/selectors";
+import { balancesWithTickerTotalSelector, settingsSelector, userBalancesWithTickerSelector, userClosedOrdersSelector } from "../../redux/selectors";
 import { Screen, ScreenProps } from "../common/index";
 import { BalanceCard } from "./balance-card";
 import { OrdersCard } from "./orders-card";
@@ -20,7 +20,7 @@ const stateToProps = createSelector(
   userBalancesWithTickerSelector,
   balancesWithTickerTotalSelector,
   settingsSelector,
-  ordersSelector,
+  userClosedOrdersSelector,
   (balance, total, settings, orders) => ({ balance, orders, total, settings })
 );
 
