@@ -1,5 +1,5 @@
 import { Symbol } from "../../domain";
-import { LOADED, SAVED, SettingsAction } from "../actions/settings";
+import { SETTINGS_SAVED, SETTING_SAVED, SettingsAction } from "../actions/settings";
 
 export type SettingsState = {
   key: string;
@@ -19,8 +19,8 @@ export const defaultSettings: SettingsState = {
 
 export const settings = (state: SettingsState = defaultSettings, action: SettingsAction) => {
   switch (action.type) {
-    case LOADED:
-    case SAVED:
+    case SETTINGS_SAVED:
+    case SETTING_SAVED:
       return { ...state, ...action.payload };
     default:
       return state;

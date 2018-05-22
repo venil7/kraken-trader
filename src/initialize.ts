@@ -1,7 +1,7 @@
 import { Store } from "redux";
 import { loadBalancesThunk, loadedBalances } from "./redux/actions/balance";
 import { loadOpenClosedOrdersThunk, loadedClosedOrders, loadedOpenOrders } from "./redux/actions/order";
-import { loadedSettings } from "./redux/actions/settings";
+import { saveSettings } from "./redux/actions/settings";
 import { loadStaticsThunk, loadedStaticCrypto, loadedStaticFiat } from "./redux/actions/static";
 import { loadTickersThunk } from "./redux/actions/ticker";
 import { GlobalState } from "./redux/reducers";
@@ -13,7 +13,7 @@ export const initialize = async (store: Store<GlobalState>) => {
   const { settings, balance, orders, statics } = await getSerializedStore();
 
   // RESTORE SETTINGS
-  dispatch(loadedSettings(settings));
+  dispatch(saveSettings(settings));
 
   // LOAD/RESTORE STATICS
   // await dispatch(loadStaticsThunk());

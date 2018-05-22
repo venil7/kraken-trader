@@ -1,23 +1,26 @@
-import React from "react";
+import * as React from "react";
 import { Component } from "react";
-import { Screen, ScreenProps } from '../common';
-import { GlobalState } from "../../redux/reducers";
-import { saveSettingsThunk, SettingsAction } from "../../redux/actions/settings";
-import { SettingsState, defaultSettings } from "../../redux/reducers/settings";
 import { connect } from "react-redux";
+import { createSelector } from "reselect";
 import { Dispatch } from "../../redux/actions";
+import { saveSettingsThunk } from "../../redux/actions/settings";
+import { SettingsState, defaultSettings } from "../../redux/reducers/settings";
+import { StaticState } from "../../redux/reducers/static";
+import { settingsSelector, staticSelector } from "../../redux/selectors";
+import { Screen, ScreenProps } from '../common';
 import { SettingsApiForm } from "./api-form";
 import { SettingsFooter, SettingsTab } from "./footer";
 import { SettingsTradingForm } from "./trading-form";
 import { SettingsViewForm } from "./view-form";
-import { StaticState } from "../../redux/reducers/static";
 
-const stateToProps = ({ settings, statics }: GlobalState) => ({ settings, statics });
-const dispatchToProps = (dispatch: Dispatch) => {
-  return {
-    saveSettings: (settings: SettingsState) => dispatch(saveSettingsThunk(settings))
-  };
-};
+const stateToProps = createSelector(
+  [settingsSelector, staticSelector],
+  (settings, statics) => ({ settings, statics })
+);
+
+const dispatchToProps = (dispatch: Dispatch) => ({
+  saveSettings: (settings: SettingsState) => dispatch(saveSettingsThunk(settings))
+});
 
 type SettingsProps = ScreenProps & {
   statics: StaticState;

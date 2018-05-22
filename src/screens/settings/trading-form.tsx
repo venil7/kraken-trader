@@ -12,7 +12,7 @@ export type SettingsTradingFormProps = ScreenProps & {
 
 export const SettingsTradingForm = (props: SettingsTradingFormProps) => (
   <List>
-    <ListItem avatar>
+    <ListItem>
       <Body>
         <Text>Base Fiat Currency</Text>
         <Text note>select preferred base fiat currency</Text>
