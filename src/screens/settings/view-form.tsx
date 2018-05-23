@@ -1,16 +1,38 @@
+import { Body, List, ListItem, Right, Switch, Text } from "native-base";
 import React from "react";
+import { PartialSettings, SettingsState } from "../../redux/reducers/settings";
 import { ScreenProps } from "../common";
-import { Form, Button, Text, Item, Input, Label, Icon } from "native-base";
-import { SettingsState } from "../../redux/reducers/settings";
 
 export type SettingsViewFormProps = ScreenProps & {
   settings: SettingsState;
-  // onSave: () => void;
-  // onChange: (field: string, value: string) => void;
+  onChange: (settings: PartialSettings) => void;
 };
 
-export const SettingsViewForm = (props: SettingsViewFormProps) => (
-  <Form>
-    <Text>View settings here</Text>
-  </Form>
-);
+export const SettingsViewForm = ({ settings, onChange }: SettingsViewFormProps) => {
+  const {
+    excludeCancelledOrders,
+    excludeZeroBalance
+  } = settings;
+  return (
+    <List>
+      <ListItem icon>
+        <Body>
+          <Text>Exclude tiny balances</Text>
+        </Body>
+        <Right>
+          <Switch value={excludeZeroBalance}
+            onValueChange={excludeZeroBalance => onChange({ excludeZeroBalance })} />
+        </Right>
+      </ListItem>
+      <ListItem icon>
+        <Body>
+          <Text>Exclude cancelled orders</Text>
+        </Body>
+        <Right>
+          <Switch value={excludeCancelledOrders}
+            onValueChange={excludeCancelledOrders => onChange({ excludeCancelledOrders })} />
+        </Right>
+      </ListItem>
+    </List>
+  )
+};

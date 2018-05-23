@@ -3,8 +3,8 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import { createSelector } from "reselect";
 import { Dispatch } from "../../redux/actions";
-import { saveSettingsThunk } from "../../redux/actions/settings";
-import { SettingsState, defaultSettings } from "../../redux/reducers/settings";
+import { saveSettingThunk } from "../../redux/actions/settings";
+import { PartialSettings, SettingsState } from "../../redux/reducers/settings";
 import { StaticState } from "../../redux/reducers/static";
 import { settingsSelector, staticSelector } from "../../redux/selectors";
 import { Screen, ScreenProps } from '../common';
@@ -19,46 +19,30 @@ const stateToProps = createSelector(
 );
 
 const dispatchToProps = (dispatch: Dispatch) => ({
-  saveSettings: (settings: SettingsState) => dispatch(saveSettingsThunk(settings))
+  saveSettings: (settings: PartialSettings) =>
+    dispatch(saveSettingThunk(settings))
 });
 
 type SettingsProps = ScreenProps & {
   statics: StaticState;
   settings: SettingsState;
-  saveSettings: (settings: SettingsState) => void;
+  saveSettings: (settings: PartialSettings) => void;
 };
 
 type State = {
-  tab?: SettingsTab
-  settings: SettingsState,
+  tab: SettingsTab
 };
 
 @connect(stateToProps, dispatchToProps)
 export class Settings extends Component<SettingsProps, State> {
+  state = { tab: SettingsTab.Trading };
 
-  state = {
-    settings: defaultSettings,
-    tab: SettingsTab.Trading,
-  };
-
-  static getDerivedStateFromProps(nextProps: SettingsProps): State {
-    return { settings: nextProps.settings };
-  }
-
-  onAuthChange = (auth: { key?: string, secret?: string }, save = false) => {
-    const { settings } = this.state;
-    this.setState({ settings: { ...settings, ...auth } }, () => {
-      if (save) {
-        this.onSave();
-      }
-    });
-  }
-
-  onSave = () => this.props.saveSettings(this.state.settings);
+  onSave = (settings: Partial<SettingsState>) =>
+    this.props.saveSettings(settings);
 
   render() {
-    const { tab, settings } = this.state;
-    const props = { ...this.props, settings };
+    const { tab } = this.state;
+    const props = this.props;
     return (
       <Screen
         back
@@ -67,16 +51,21 @@ export class Settings extends Component<SettingsProps, State> {
         render={(_props) => {
           switch (tab) {
             case SettingsTab.Trading:
-              return (<SettingsTradingForm {...props} />)
+              return (<SettingsTradingForm
+                {...props}
+                onChange={this.onSave}
+              />)
             case SettingsTab.View:
-              return (<SettingsViewForm {...props} />)
+              return (<SettingsViewForm
+                {...props}
+                onChange={this.onSave}
+              />)
             case SettingsTab.API:
             default:
               return (
                 <SettingsApiForm
                   {...props}
-                  onSave={this.onSave}
-                  onAuthChange={this.onAuthChange}
+                  onChange={this.onSave}
                 />
               );
           }

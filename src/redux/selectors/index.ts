@@ -61,3 +61,9 @@ export const userClosedOrdersSelector = createSelector(
         : true)
   })
 );
+
+
+export const fiatSymbolSelector = createSelector(
+  [staticSelector],
+  ({ fiats }): Symbol[] => fiats.map(f => f.symbol)
+);

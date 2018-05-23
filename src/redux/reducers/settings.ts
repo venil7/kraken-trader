@@ -1,6 +1,8 @@
 import { Symbol } from "../../domain";
 import { SETTINGS_SAVED, SETTING_SAVED, SettingsAction } from "../actions/settings";
 
+export type PartialSettings = Partial<SettingsState>;
+
 export type SettingsState = {
   key: string;
   secret: string;
