@@ -1,5 +1,5 @@
 import { Ticker } from "../../domain";
-import { LOADED_TICKER, LOAD_TICKER, TickerAction } from "../actions/ticker";
+import { LOADED_TICKER, LOADING_TICKER, TickerAction } from "../actions/ticker";
 import { EXPIRED, Expirable, expireInHour } from "./expire";
 import { Loadable, LoadingState } from "./loading";
 
@@ -15,7 +15,7 @@ const initialState: TickerState = {
 
 export const ticker = (state: TickerState = initialState, action: TickerAction) => {
   switch (action.type) {
-    case LOAD_TICKER:
+    case LOADING_TICKER:
       return { ...state, loading: LoadingState.Loading };
     case LOADED_TICKER:
       return {

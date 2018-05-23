@@ -1,32 +1,32 @@
-import { SettingsState, defaultSettings } from '../reducers/settings';
+import { PartialSettings, SettingsState, defaultSettings } from '../reducers/settings';
 import { Dispatch } from './index';
 import { displayDanger, displaySuccess } from './notification';
 
-export const SETTINGS_SAVING = "settings/saving";
-export const SETTINGS_SAVED = "settings/saved";
-export const SETTING_SAVED = "setting/saved";
+export const SAVING_SETTINGS = "settings/saving";
+export const SAVED_SETTINGS = "settings/saved*";
+export const SAVED_SETTING = "setting/saved*";
 
-type SettingsSave = typeof SETTINGS_SAVING;
-type SettingsSaved = typeof SETTINGS_SAVED;
-type SettingSaved = typeof SETTING_SAVED;
+type SavingSettings = typeof SAVING_SETTINGS;
+type SavedSettings = typeof SAVED_SETTINGS;
+type SavedSetting = typeof SAVED_SETTING;
 
-type SettingsSavingAction = { type: SettingsSave };
-type SettingsSavedAction = { type: SettingsSaved, payload: SettingsState };
-type SettingSavedAction = { type: SettingSaved, payload: Partial<SettingsState> };
+type SavingSettingsAction = { type: SavingSettings };
+type SavedSettingsAction = { type: SavedSettings, payload: SettingsState };
+type SavedSettingAction = { type: SavedSetting, payload: PartialSettings };
 
 export type SettingsAction =
-  | SettingsSavingAction
-  | SettingsSavedAction
-  | SettingSavedAction;
+  | SavingSettingsAction
+  | SavedSettingsAction
+  | SavedSettingAction;
 
 export const saveSettings = (payload: SettingsState): SettingsAction =>
-  ({ type: SETTINGS_SAVED, payload });
+  ({ type: SAVED_SETTINGS, payload });
 
-export const saveSetting = (payload: Partial<SettingsState>): SettingsAction =>
-  ({ type: SETTING_SAVED, payload });
+export const saveSetting = (payload: PartialSettings): SettingsAction =>
+  ({ type: SAVED_SETTING, payload });
 
 export const saveSettingsThunk = (settings: SettingsState) => (dispatch: Dispatch) => {
-  dispatch({ type: SETTINGS_SAVING });
+  dispatch({ type: SAVING_SETTINGS });
   try {
     dispatch(saveSettings(settings));
     dispatch(displaySuccess('Saved!'));
@@ -37,7 +37,7 @@ export const saveSettingsThunk = (settings: SettingsState) => (dispatch: Dispatc
 };
 
 export const saveSettingThunk = (settings: Partial<SettingsState>) => (dispatch: Dispatch) => {
-  dispatch({ type: SETTINGS_SAVING });
+  dispatch({ type: SAVING_SETTINGS });
   try {
     dispatch(saveSetting(settings));
     dispatch(displaySuccess('Saved!'));

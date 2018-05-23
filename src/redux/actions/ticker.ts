@@ -3,17 +3,17 @@ import { getTickerInfo } from "../../services/kraken";
 import { Dispatch, GetState } from "./index";
 import { displayDanger } from "./notification";
 
-export const LOAD_TICKER = "ticker/load";
-export const LOADED_TICKER = "ticker/loaded";
+export const LOADING_TICKER = "ticker/loading";
+export const LOADED_TICKER = "ticker/loaded*";
 
-type LoadTicker = typeof LOAD_TICKER;
+type LoadingTicker = typeof LOADING_TICKER;
 type LoadedTicker = typeof LOADED_TICKER;
 
-export type LoadTickerAction = { type: LoadTicker };
+export type LoadingTickerAction = { type: LoadingTicker };
 export type LoadedTickerAction = { type: LoadedTicker, payload: Ticker[] };
 
 export type TickerAction =
-  | LoadTickerAction
+  | LoadingTickerAction
   | LoadedTickerAction;
 
 export const loadedTickers = (payload: Ticker[]): TickerAction =>
@@ -21,7 +21,7 @@ export const loadedTickers = (payload: Ticker[]): TickerAction =>
 
 export const loadTickersThunk = () =>
   async (dispatch: Dispatch, getState: GetState) => {
-    dispatch({ type: LOAD_TICKER });
+    dispatch({ type: LOADING_TICKER });
     const { balance, settings } = getState();
     const symbols = balance
       .balances

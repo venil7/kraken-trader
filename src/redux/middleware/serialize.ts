@@ -1,7 +1,8 @@
 import { serializeStore } from '../../services/serialize';
-import { GetState, DispatchableAction } from '../actions';
+import { DispatchableAction, GetState } from '../actions';
 
-const serializableAction = (action: DispatchableAction) => true;
+const serializableAction = ({ type }: DispatchableAction) =>
+  type.toString().endsWith('*');
 
 export const serialize = ({ getState }: { getState: GetState }) =>
   (next: Function) =>

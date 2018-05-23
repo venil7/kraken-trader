@@ -1,5 +1,5 @@
 import { Symbol } from "../../domain";
-import { SETTINGS_SAVED, SETTING_SAVED, SettingsAction } from "../actions/settings";
+import { SAVED_SETTING, SAVED_SETTINGS, SettingsAction } from "../actions/settings";
 
 export type PartialSettings = Partial<SettingsState>;
 
@@ -21,8 +21,8 @@ export const defaultSettings: SettingsState = {
 
 export const settings = (state: SettingsState = defaultSettings, action: SettingsAction) => {
   switch (action.type) {
-    case SETTINGS_SAVED:
-    case SETTING_SAVED:
+    case SAVED_SETTINGS:
+    case SAVED_SETTING:
       return { ...state, ...action.payload };
     default:
       return state;

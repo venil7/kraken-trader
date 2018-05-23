@@ -1,5 +1,5 @@
 import { Asset, CurrencyType, TradableAssetPair } from '../../domain';
-import { LOADED_STATIC, LOADED_STATIC_CRYPTO, LOADED_STATIC_FIAT, LOAD_STATIC, StaticAction } from '../actions/static';
+import { LOADED_STATIC, LOADED_STATIC_CRYPTO, LOADED_STATIC_FIAT, LOADING_STATIC, StaticAction } from '../actions/static';
 import { EXPIRED, Expirable, expireInDays } from './expire';
 import { Loadable, LoadingState } from './loading';
 
@@ -19,7 +19,7 @@ const initialState: StaticState = {
 
 export const statics = (state: StaticState = initialState, action: StaticAction) => {
   switch (action.type) {
-    case LOAD_STATIC: {
+    case LOADING_STATIC: {
       return {
         ...state,
         loading: LoadingState.Loading

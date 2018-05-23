@@ -1,29 +1,28 @@
 // import * as Redux from 'redux';
-import { getOpenOrders, getClosedOrders, auth } from '../../services/kraken';
-import { Order } from '../../domain';
-import { Auth } from '../../services/kraken';
-import { displayDanger } from './notification';
 import { Dispatch, GetState } from '.';
+import { Order } from '../../domain';
+import { auth, getClosedOrders, getOpenOrders } from '../../services/kraken';
+import { displayDanger } from './notification';
 
-export const LOAD_OPEN = "order/load/open";
-export const LOADED_OPEN = "order/loaded/open";
-export const LOAD_CLOSED = "order/load/closed";
-export const LOADED_CLOSED = "order/loaded/closed";
+export const LOADING_OPEN = "order/loading/open";
+export const LOADED_OPEN = "order/loaded/open*";
+export const LOADING_CLOSED = "order/loading/closed";
+export const LOADED_CLOSED = "order/loaded/closed*";
 
-type LoadOpen = typeof LOAD_OPEN;
+type LoadingOpen = typeof LOADING_OPEN;
 type LoadedOpen = typeof LOADED_OPEN;
-type LoadClosed = typeof LOAD_CLOSED;
+type LoadingClosed = typeof LOADING_CLOSED;
 type LoadedClosed = typeof LOADED_CLOSED;
 
-export type LoadOpenAction = { type: LoadOpen };
-export type LoadClosedAction = { type: LoadClosed };
+export type LoadingOpenAction = { type: LoadingOpen };
+export type LoadingClosedAction = { type: LoadingClosed };
 export type LoadedOpenAction = { type: LoadedOpen, payload: Order[] };
 export type LoadedClosedAction = { type: LoadedClosed, payload: Order[] };
 
 export type OrderAction =
-  LoadOpenAction |
+  LoadingOpenAction |
   LoadedOpenAction |
-  LoadClosedAction |
+  LoadingClosedAction |
   LoadedClosedAction;
 
 export const loadedOpenOrders = (payload: Order[]): LoadedOpenAction =>
@@ -36,7 +35,7 @@ export const loadOpenOrdersThunk = () =>
   async (dispatch: Dispatch, getState: GetState) => {
     const _auth = auth(getState().settings);
 
-    dispatch({ type: LOAD_OPEN });
+    dispatch({ type: LOADING_OPEN });
     try {
       const orders = await getOpenOrders(_auth);
       dispatch(loadedOpenOrders(orders));
@@ -50,7 +49,7 @@ export const loadClosedOrdersThunk = () =>
   async (dispatch: Dispatch, getState: GetState) => {
     const _auth = auth(getState().settings);
 
-    dispatch({ type: LOAD_CLOSED });
+    dispatch({ type: LOADING_CLOSED });
     try {
       const orders = await getClosedOrders(_auth);
       dispatch(loadedClosedOrders(orders));

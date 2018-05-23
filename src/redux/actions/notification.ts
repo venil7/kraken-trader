@@ -17,8 +17,6 @@ export type ShowNotification =
 
 export type NotificationAction = { type: ShowNotification, text: string };
 
-// type Dispatch = Redux.Dispatch<NotificationAction, any>;
-
 const displayNotifcation = (type: ShowNotification, text: string) => (dispatch: Dispatch) => {
   dispatch({ text, type });
   Toast.show({ text, type, buttonText: "Okay", position: "bottom", duration: 8000 });

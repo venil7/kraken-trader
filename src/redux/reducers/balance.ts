@@ -1,5 +1,5 @@
 import { Balance, BalanceWithTicker } from '../../domain';
-import { BalanceAction, LOADED_BALANCE, LOAD_BALANCE } from '../actions/balance';
+import { BalanceAction, LOADED_BALANCE, LOADING_BALANCE } from '../actions/balance';
 import { EXPIRED, Expirable, expireInHour } from './expire';
 import { Loadable, LoadingState } from './loading';
 
@@ -17,7 +17,7 @@ const initState: BalanceState = {
 
 const balance = (state = initState, action: BalanceAction) => {
   switch (action.type) {
-    case LOAD_BALANCE: {
+    case LOADING_BALANCE: {
       return { ...state, loading: LoadingState.Loading, balances: [] };
     }
     case LOADED_BALANCE: {
