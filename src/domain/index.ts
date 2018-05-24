@@ -1,6 +1,7 @@
 export type Balance = {
-  symbol: Symbol,
-  balance: number
+  symbol: Symbol;
+  balance: number;
+  currencyType: CurrencyType;
 };
 
 export type BalanceWithTicker = Balance & {

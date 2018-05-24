@@ -1,4 +1,4 @@
-import { Ticker } from "../../domain";
+import { CurrencyType, Ticker } from "../../domain";
 import { getTickerInfo } from "../../services/kraken";
 import { Dispatch, GetState } from "./index";
 import { displayDanger } from "./notification";
@@ -23,9 +23,8 @@ export const loadTickersThunk = () =>
   async (dispatch: Dispatch, getState: GetState) => {
     dispatch({ type: LOADING_TICKER });
     const { balance, settings } = getState();
-    const symbols = balance
-      .balances
-      .filter(a => a.balance > 0)
+    const symbols = balance.balances
+      .filter(a => a.currencyType !== CurrencyType.Fiat)
       .map(a => a.symbol);
     try {
       const tickers = await getTickerInfo(settings.prefFiat, symbols);

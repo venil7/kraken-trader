@@ -1,6 +1,6 @@
 /// <reference path="kraken-wrapper.d.ts" />
 import { ApiAsset, ApiOHLCRow, ApiOrder, ApiTicker, ApiTradableAssetPair } from 'kraken-wrapper';
-import { Asset, CurrencyType, OhlcRow, Order, OrderType, Pair, Status, Symbol, Ticker, TradableAssetPair } from "../domain";
+import { Asset, Balance, CurrencyType, OhlcRow, Order, OrderType, Pair, Status, Symbol, Ticker, TradableAssetPair } from "../domain";
 
 export const currencyType = (symbol: Symbol | string) => symbol.toString().startsWith('Z')
   ? CurrencyType.Fiat
@@ -17,34 +17,22 @@ export const toTradableAssetPair = (pair: string, assetPair: ApiTradableAssetPai
 
 export const toPair = (pairName: string): Pair => {
   switch (pairName) {
-    case 'BCHUSD':
-    case 'XBCHZUSD': return Pair.BCH_USD;
-    case 'BCHXBT':
-    case 'XBCHXXBT': return Pair.BCH_XBT;
-    case 'DASHEUR':
-    case 'XDASHZEUR': return Pair.DASH_EUR;
-    case 'DASHUSD':
-    case 'XDASHZUSD': return Pair.DASH_USD;
-    case 'DASHXBT':
-    case 'XDASHXXBT': return Pair.DASH_XBT;
-    case 'EOSETH':
-    case 'XEOSXETH': return Pair.EOS_ETH;
-    case 'EOSEUR':
-    case 'XEOSZEUR': return Pair.EOS_EUR;
-    case 'EOSUSD':
-    case 'XEOSZUSD': return Pair.EOS_USD;
-    case 'EOSXBT':
-    case 'XEOSXXBT': return Pair.EOS_XBT;
-    case 'GNOETH':
-    case 'XGNOXETH': return Pair.GNO_ETH;
-    case 'GNOEUR':
-    case 'XGNOZEUR': return Pair.GNO_EUR;
-    case 'GNOUSD':
-    case 'XGNOZUSD': return Pair.GNO_USD;
-    case 'GNOXBT':
-    case 'XGNOXXBT': return Pair.GNO_XBT;
+    case 'BCHUSD': return Pair.BCH_USD;
+    case 'BCHEUR': return Pair.BCH_EUR;
+    case 'BCHXBT': return Pair.BCH_XBT;
+    case 'DASHEUR': return Pair.DASH_EUR;
+    case 'DASHUSD': return Pair.DASH_USD;
+    case 'DASHXBT': return Pair.DASH_XBT;
+    case 'EOSETH': return Pair.EOS_ETH;
+    case 'EOSEUR': return Pair.EOS_EUR;
+    case 'EOSUSD': return Pair.EOS_USD;
+    case 'EOSXBT': return Pair.EOS_XBT;
+    case 'GNOETH': return Pair.GNO_ETH;
+    case 'GNOEUR': return Pair.GNO_EUR;
+    case 'GNOUSD': return Pair.GNO_USD;
+    case 'GNOXBT': return Pair.GNO_XBT;
     case 'USDTUSD':
-    case 'ZUSDTZUSD': return Pair.USDT_USD;
+    case 'USDTZUSD': return Pair.USDT_USD;
     case 'ETCETH':
     case 'XETCXETH': return Pair.ETC_ETH;
     case 'ETCXBT':
@@ -130,7 +118,7 @@ export const toPair = (pairName: string): Pair => {
     case 'ZECUSD':
     case 'XZECZUSD': return Pair.ZEC_USD;
     default:
-      throw new Error('Unknown pair');
+      throw new Error(`Unknown pair: ${pairName}`);
   }
 };
 
@@ -263,7 +251,10 @@ export const toAmount = (amount: number, symbol: Symbol): string => {
   const isFiat = currencyType(symbol) === CurrencyType.Fiat;
   const num = format(amount, isFiat ? 2 : 5);
   return `${letter}${num}`;
-}
+};
+
+export const toBalance = (symbol: string, balance: string): Balance =>
+  ({ symbol: <Symbol>symbol, balance: parseFloat(balance), currencyType: currencyType(symbol) });
 
 export const orderToText = (order: Order): string =>
   `${toAmount(order.vol, order.base)} @ ${toAmount(order.price, order.quote)}`;
@@ -271,6 +262,7 @@ export const orderToText = (order: Order): string =>
 export const pairToSymbols = (pair: Pair): [Symbol, Symbol] => {
   switch (pair) {
     case Pair.BCH_USD: return [Symbol.BCH, Symbol.USD];
+    case Pair.BCH_EUR: return [Symbol.BCH, Symbol.EUR];
     case Pair.BCH_XBT: return [Symbol.BCH, Symbol.XBT];
     case Pair.DASH_EUR: return [Symbol.DASH, Symbol.EUR];
     case Pair.DASH_USD: return [Symbol.DASH, Symbol.USD];
@@ -338,7 +330,7 @@ export const pairToSymbols = (pair: Pair): [Symbol, Symbol] => {
     case Pair.ZEC_JPY: return [Symbol.ZEC, Symbol.JPY];
     case Pair.ZEC_USD: return [Symbol.ZEC, Symbol.USD];
     default:
-      throw new Error('unknown pair');
+      throw new Error(`Unknown pair: ${pair}`);
   }
 };
 
