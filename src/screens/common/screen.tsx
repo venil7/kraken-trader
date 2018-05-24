@@ -1,21 +1,24 @@
-import React from 'react'
+import { Container, Content, Footer } from 'native-base';
+import * as React from 'react';
 import { Component } from 'react';
-import { Container, Content, Spinner, Text, Footer } from 'native-base';
-import { ScreenHeader, ScreenHeaderProps } from './screenheader';
-import { spinnerWhileLoading } from './loading';
-import { branch, renderNothing } from 'recompose';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { hideIfNoData } from './hide';
+import { ScreenHeader, ScreenHeaderProps } from './screenheader';
 
 export type ScreenProps = ScreenHeaderProps & {
   render: (p: ScreenProps) => JSX.Element;
   footer?: (p: ScreenProps) => JSX.Element;
 };
 
-const ScreenContent = spinnerWhileLoading((props: ScreenProps) => (
-  <Content>
-    {props.render(props)}
-  </Content>
-));
+const ScreenContent = (props: ScreenProps) => {
+  const { loading = false } = props;
+  return (
+    <Content>
+      <Spinner visible={loading} />
+      {props.render(props)}
+    </Content>
+  )
+};
 
 const hideFooter = hideIfNoData((props: ScreenProps) => !props.footer);
 const ScreenFooter = hideFooter((props: ScreenProps) => {
