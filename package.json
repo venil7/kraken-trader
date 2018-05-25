@@ -12,6 +12,7 @@
   "dependencies": {
     "@tradle/react-native-http": "^2.0.0",
     "@types/es6-promise": "^3.3.0",
+    "@types/lodash.debounce": "^4.0.3",
     "@types/react-native-loading-spinner-overlay": "^0.5.0",
     "@types/react-navigation": "^1.5.10",
     "@types/react-redux": "^5.0.19",
@@ -20,6 +21,7 @@
     "events": "^1.1.1",
     "https-browserify": "0.0.1",
     "kraken-wrapper": "^1.0.1",
+    "lodash.debounce": "^4.0.8",
     "moment": "^2.22.1",
     "native-base": "^2.4.3",
     "querystring-es3": "^0.2.1",

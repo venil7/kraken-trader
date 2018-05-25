@@ -73,7 +73,6 @@ const getTickerInfo = async (quote: Symbol, symbols: Symbol[]): Promise<Ticker[]
   const pairs = toPairs(quote, symbols);
   if (!pairs.length) return [];
   const params = { pair: pairs.map(p => p.toString()).join(',') };
-  console.log(params.pair);
   const { result, error } = await instance().getTickerInformation(params);
   throwOnError(error);
   const tickers = entries(result)

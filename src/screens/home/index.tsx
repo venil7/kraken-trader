@@ -57,9 +57,17 @@ export class Home extends Component<HomeProps, any> {
         loading={loading}
         render={() => (
           <Content>
-            <BalanceCard balances={balances} total={total} totalSymbol={settings.prefFiat} />
-            <OrdersCard title="Open Orders" orders={orders.openOrders} />
-            <OrdersCard title="Closed Orders" orders={orders.closedOrders} />
+            <BalanceCard
+              balances={balances}
+              total={total}
+              totalSymbol={settings.prefFiat} />
+            <OrdersCard
+              title="Open Orders"
+              onCancel={(o) => alert('deleted')}
+              orders={orders.openOrders} />
+            <OrdersCard
+              title="Closed Orders"
+              orders={orders.closedOrders} />
           </Content>
         )}
       />
