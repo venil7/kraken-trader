@@ -1,6 +1,6 @@
 /// <reference path="kraken-wrapper.d.ts" />
 import KrakenAPI, { ApiAsset, ApiOHLCRow, ApiOrder, ApiTicker, ApiTradableAssetPair } from 'kraken-wrapper';
-import { Asset, Balance, Interval, OhlcRow, Order, Pair, Symbol, Ticker, TradableAssetPair } from '../domain';
+import { Asset, Balance, CancelOrderConfirmation, Interval, OhlcRow, Order, Pair, Symbol, Ticker, TradableAssetPair } from '../domain';
 import { toAsset, toBalance, toOhlcRow, toOrder, toPairs, toTicker, toTradableAssetPair } from './convert';
 
 type Obj = { entries: (o: any) => [string, any][] };
@@ -99,6 +99,12 @@ const getTradablePairs = async (): Promise<TradableAssetPair[]> => {
   return tradables;
 };
 
+const setCancelOrder = async (txid: string): Promise<CancelOrderConfirmation> => {
+  const { result, error } = await instance().setCancelOrder({ txid });
+  throwOnError(error);
+  return <CancelOrderConfirmation>result;
+};
+
 export {
   getBalance,
   getOpenOrders,
@@ -106,5 +112,6 @@ export {
   getAssetInfo,
   getTickerInfo,
   getOHLC,
-  getTradablePairs
+  getTradablePairs,
+  setCancelOrder
 };

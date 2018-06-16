@@ -1,4 +1,3 @@
-// import * as Redux from 'redux';
 import { Toast } from 'native-base';
 import { Dispatch } from '.';
 

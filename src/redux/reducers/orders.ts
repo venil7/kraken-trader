@@ -1,5 +1,5 @@
 import { Order } from '../../domain';
-import { LOADED_CLOSED, LOADED_OPEN, LOADING_CLOSED, LOADING_OPEN, OrderAction } from '../actions/order';
+import { LOADED_CLOSED_ORDERS, LOADED_OPEN_ORDERS, LOADING_CLOSED_ORDERS, LOADING_OPEN_ORDERS, OrderAction } from '../actions/order';
 import { EXPIRED, Expirable, expireInHour } from './expire';
 import { Loadable, LoadingState } from './loading';
 
@@ -17,22 +17,22 @@ const initialState: OrdersState = {
 
 const orders = (state: OrdersState = initialState, action: OrderAction) => {
   switch (action.type) {
-    case LOADING_OPEN:
+    case LOADING_OPEN_ORDERS:
       return { ...state, loading: LoadingState.Loading, openOrders: [] };
-    case LOADED_OPEN:
+    case LOADED_OPEN_ORDERS:
       return {
         ...state,
         loading: LoadingState.Success,
         openOrders: action.payload,
         expires: expireInHour()
       };
-    case LOADING_CLOSED:
+    case LOADING_CLOSED_ORDERS:
       return {
         ...state,
         loading: LoadingState.Loading,
         closedOrders: []
       };
-    case LOADED_CLOSED:
+    case LOADED_CLOSED_ORDERS:
       return {
         ...state,
         loading: LoadingState.Success,

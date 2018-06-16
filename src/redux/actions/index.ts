@@ -1,12 +1,12 @@
 import * as Redux from 'redux';
-import * as notification from './notification';
-import * as settings from './settings';
+import { GlobalState } from '../reducers';
 import * as balance from './balance';
+import * as error from './error';
+import * as notification from './notification';
+import * as order from './order';
+import * as settings from './settings';
 import * as statics from './static';
 import * as ticker from './ticker';
-import * as order from './order';
-
-import { GlobalState } from '../reducers';
 
 export type DispatchableAction =
   | notification.NotificationAction
@@ -14,15 +14,10 @@ export type DispatchableAction =
   | balance.BalanceAction
   | statics.StaticAction
   | ticker.TickerAction
-  | order.OrderAction;
+  | order.OrderAction
+  | error.ErrorAction;
 
 export type Dispatch = Redux.Dispatch<DispatchableAction, any>;
 export type GetState = () => GlobalState;
 
-export {
-  notification,
-  settings,
-  balance,
-  statics,
-  order,
-};
+export { notification, settings, balance, statics, order, error, };

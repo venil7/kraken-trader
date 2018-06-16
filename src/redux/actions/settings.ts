@@ -1,4 +1,5 @@
-import { PartialSettings, SettingsState, defaultSettings } from '../reducers/settings';
+import { defaultSettings, PartialSettings, SettingsState } from '../reducers/settings';
+import { addError } from './error';
 import { Dispatch } from './index';
 import { displayDanger, displaySuccess } from './notification';
 
@@ -30,8 +31,9 @@ export const saveSettingsThunk = (settings: SettingsState) => (dispatch: Dispatc
   try {
     dispatch(saveSettings(settings));
     dispatch(displaySuccess('Saved!'));
-  } catch ({ message }) {
-    dispatch(displayDanger(message));
+  } catch (error) {
+    dispatch(addError(error));
+    dispatch(displayDanger(error.message));
     dispatch(saveSettings(defaultSettings));
   }
 };
@@ -41,8 +43,9 @@ export const saveSettingThunk = (settings: Partial<SettingsState>) => (dispatch:
   try {
     dispatch(saveSetting(settings));
     dispatch(displaySuccess('Saved!'));
-  } catch ({ message }) {
-    dispatch(displayDanger(message));
+  } catch (error) {
+    dispatch(addError(error));
+    dispatch(displayDanger(error.message));
     dispatch(saveSettings(defaultSettings));
   }
 };

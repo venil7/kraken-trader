@@ -104,6 +104,13 @@ declare module 'kraken-wrapper' {
     }
   };
 
+  export type ApiCancelOrder = ApiError & {
+    result: {
+      count: number;
+      pending: any;
+    }
+  };
+
   export default class KrakenWrapper {
     constructor(key: string, secret: string);
     //public
@@ -123,7 +130,7 @@ declare module 'kraken-wrapper' {
     public getLedgers(params?: any): Promise<any>;
     public getTradeVolume(params?: any): Promise<any>;
     public setAddOrder(params?: any): Promise<any>;
-    public setCancelOrder(params?: any): Promise<any>;
+    public setCancelOrder(params: { txid: string }): Promise<ApiCancelOrder>;
   }
 }
 

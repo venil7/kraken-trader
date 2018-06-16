@@ -1,5 +1,6 @@
 import { CurrencyType, Ticker } from "../../domain";
 import { getTickerInfo } from "../../services/kraken";
+import { addError } from "./error";
 import { Dispatch, GetState } from "./index";
 import { displayDanger } from "./notification";
 
@@ -29,8 +30,9 @@ export const loadTickersThunk = () =>
     try {
       const tickers = await getTickerInfo(settings.prefFiat, symbols);
       dispatch(loadedTickers(tickers));
-    } catch ({ message }) {
-      dispatch(displayDanger(message));
+    } catch (error) {
+      dispatch(addError(error));
+      dispatch(displayDanger(error.message));
       dispatch(loadedTickers([]));
     }
   };

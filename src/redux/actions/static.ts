@@ -1,5 +1,6 @@
 import { Asset, TradableAssetPair } from "../../domain";
 import { getAssetInfo, getTradablePairs } from '../../services/kraken';
+import { addError } from "./error";
 import { Dispatch } from './index';
 import { displayDanger } from './notification';
 
@@ -41,8 +42,9 @@ export const loadStaticsThunk = () => async (dispatch: Dispatch) => {
     const assets = await getAssetInfo();
     const tradables = await getTradablePairs();
     dispatch(loadedStatic({ assets, tradables }));
-  } catch ({ message }) {
+  } catch (error) {
+    dispatch(addError(error));
+    dispatch(displayDanger(error.message));
     dispatch(loadedStatic({ assets: [], tradables: [] }));
-    dispatch(displayDanger(message));
   }
 };

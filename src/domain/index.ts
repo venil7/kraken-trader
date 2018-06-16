@@ -222,3 +222,8 @@ export type OhlcRow = {
   volume: number;
   count: number;
 };
+
+export type CancelOrderConfirmation = {
+  count: number;
+  pending: any;
+};

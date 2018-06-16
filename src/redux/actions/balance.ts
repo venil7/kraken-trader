@@ -1,6 +1,7 @@
 import { Dispatch, GetState } from '.';
 import { Balance } from '../../domain';
 import { auth, getBalance } from '../../services/kraken';
+import { addError } from './error';
 import { displayDanger } from './notification';
 
 export const LOADING_BALANCE = "balance/loading";
@@ -26,8 +27,9 @@ export const loadBalancesThunk = () =>
     try {
       const balances = await getBalance(_auth);
       dispatch(loadedBalances(balances));
-    } catch ({ message }) {
-      dispatch(displayDanger(message));
+    } catch (error) {
+      dispatch(addError(error));
+      dispatch(displayDanger(error.message));
       dispatch(loadedBalances([]));
     }
   };
