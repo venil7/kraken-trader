@@ -1,23 +1,23 @@
-import React from "react";
 import { Root } from "native-base";
+import React from "react";
 import { StackNavigator } from "react-navigation";
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
+import logger from 'redux-logger';
 import thunk from 'redux-thunk';
-import logger from 'redux-logger'
 import { Drawer } from './Drawer';
-import { reducer, GlobalState } from './redux/reducers';
-
-import { Home, Orders, Settings } from './screens';
-import { serialize } from "./redux/middleware/serialize";
 import { initialize } from "./initialize";
+import { serialize } from "./redux/middleware/serialize";
+import { reducer } from './redux/reducers';
+import { Debug, Home, Orders, Settings } from './screens';
 
 const AppNavigator = StackNavigator(
   {
     Home: { screen: Home },
     Drawer: { screen: Drawer },
     Orders: { screen: Orders },
-    Settings: { screen: Settings }
+    Settings: { screen: Settings },
+    Debug: { screen: Debug },
   },
   {
     initialRouteName: "Drawer",

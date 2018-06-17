@@ -1,7 +1,12 @@
 import { ADD_ERROR, ErrorAction } from "../actions/error";
 
+export type ErrorRec = {
+  stack: string;
+  name: string;
+  message: string;
+}
 export type ErrorState = {
-  errors: { stack: string; name: string; message: string; }[],
+  errors: ErrorRec[],
 };
 
 const initialState: ErrorState = {

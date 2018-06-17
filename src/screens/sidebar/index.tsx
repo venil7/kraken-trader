@@ -1,10 +1,7 @@
-import React from "react";
+import { Container, Content, Icon, Left, List, ListItem, Text } from "native-base";
+import * as React from "react";
 import { Component } from "react";
 import { Image } from "react-native";
-import {
-  Content, Text, List, ListItem,
-  Icon, Container, Left
-} from "native-base";
 import styles from "./style";
 
 const drawerCover = require("../../../assets/background.jpeg");
@@ -39,6 +36,12 @@ const items = [
     name: "About",
     route: "About",
     icon: { name: "price-tag", type: "Entypo" },
+    bg: "#DA4437",
+  },
+  {
+    name: "Debug",
+    route: "Debug",
+    icon: { name: "settings", type: "Feather" },
     bg: "#DA4437",
   }
 ];
